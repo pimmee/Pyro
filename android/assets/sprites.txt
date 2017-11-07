@@ -1,0 +1,19 @@
+sprites.png
+size: 1785, 360
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Dog_Idle
+  rotate: false
+  xy: 1, 194
+  size: 1192, 165
+  orig: 1300, 300
+  offset: 55, 68
+  index: -1
+Dog_Run
+  rotate: false
+  xy: 1, 1
+  size: 1783, 191
+  orig: 1900, 300
+  offset: 59, 53
+  index: -1
