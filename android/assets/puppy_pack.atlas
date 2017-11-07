@@ -1,0 +1,62 @@
+
+puppy_pack.png
+size: 4096,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Dog_Dizzy
+  rotate: false
+  xy: 1904, 1008
+  size: 1000, 300
+  orig: 1000, 300
+  offset: 0, 0
+  index: -1
+Dog_Faint
+  rotate: false
+  xy: 2, 1008
+  size: 1900, 300
+  orig: 1900, 300
+  offset: 0, 0
+  index: -1
+Dog_Fly
+  rotate: false
+  xy: 2, 606
+  size: 1800, 400
+  orig: 1800, 400
+  offset: 0, 0
+  index: -1
+Dog_Hurt
+  rotate: false
+  xy: 2804, 1510
+  size: 1000, 300
+  orig: 1000, 300
+  offset: 0, 0
+  index: -1
+Dog_Idle
+  rotate: false
+  xy: 2, 2
+  size: 1300, 300
+  orig: 1300, 300
+  offset: 0, 0
+  index: -1
+Dog_Jump
+  rotate: false
+  xy: 2, 1310
+  size: 2800, 500
+  orig: 2800, 500
+  offset: 0, 0
+  index: -1
+Dog_Run
+  rotate: false
+  xy: 2, 304
+  size: 1900, 300
+  orig: 1900, 300
+  offset: 0, 0
+  index: -1
+Miscellaneous
+  rotate: false
+  xy: 1804, 606
+  size: 500, 400
+  orig: 500, 400
+  offset: 0, 0
+  index: -1

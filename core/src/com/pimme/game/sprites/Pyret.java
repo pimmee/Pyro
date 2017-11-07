@@ -17,12 +17,16 @@ public class Pyret extends Sprite
     private TextureRegion pyretStand;
 
     public Pyret(World world, PlayScreen screen) {
-        super(screen.getAtlas().findRegion("Dog_Run"));
+        super(screen.getAtlas().findRegion("Dog_Idle"));
         this.world = world;
         definePyret();
-	pyretStand = new TextureRegion(getTexture(), 0, 0, 30, 30);
+	pyretStand = new TextureRegion(getTexture(), 0, 0, 330, 300);
 	setBounds(0, 0, 30 / PyroGame.PPM, 30 / PyroGame.PPM);
 	setRegion(pyretStand);
+    }
+
+    public void update(final float dt) {
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
     }
 
     public void definePyret() {
@@ -33,7 +37,7 @@ public class Pyret extends Sprite
 
         FixtureDef fdef = new FixtureDef();
 	CircleShape shape = new CircleShape();
-	shape.setRadius(5 / PyroGame.PPM);
+	shape.setRadius(6 / PyroGame.PPM);
 
 	fdef.shape = shape;
 	b2body.createFixture(fdef);

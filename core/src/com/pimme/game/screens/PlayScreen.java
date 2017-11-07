@@ -66,10 +66,10 @@ public class PlayScreen implements Screen
 
         world = new World(new Vector2(0, -10), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
+	atlas = new TextureAtlas("puppy_pack.atlas");
         player = new Pyret(world, this);
 
         worldCreator = new B2WorldCreator(world, map);
-        atlas = new TextureAtlas("sprites.png");
 
     }
 
@@ -84,6 +84,7 @@ public class PlayScreen implements Screen
         handleInput(dt);
 
         world.step(1/60f, 6, 2);
+        player.update(dt);
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.update();
         renderer.setView(gameCam);
@@ -102,7 +103,7 @@ public class PlayScreen implements Screen
 
     @Override public void render(final float delta) {
         update(delta);
-	Gdx.gl.glClearColor(1, 0, 0, 1);
+	Gdx.gl.glClearColor(0, 0, 0, 1);
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render game map
         renderer.render();
@@ -111,7 +112,6 @@ public class PlayScreen implements Screen
 	game.batch.setProjectionMatrix(gameCam.combined);
 	game.batch.begin();
 	player.draw(game.batch);
-//	//game.batch.draw(texture, 0, 0);
 	game.batch.end();
 
     }
