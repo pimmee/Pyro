@@ -1,4 +1,4 @@
-package com.pimme.game.sprites;
+package com.pimme.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -28,7 +28,7 @@ public class Pyret extends Sprite
     private Array<TextureRegion> frames;
 
     public Pyret(World world, PlayScreen screen) {
-        super(screen.getAtlas().findRegion("Dog_Idle"));
+        super(screen.getAtlas().findRegion("Dog_Jump"));
         this.world = world;
         currentState = State.STANDING;
         previousState = State.STANDING;
@@ -43,7 +43,6 @@ public class Pyret extends Sprite
     public void update(final float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
-
     }
 
     public TextureRegion getFrame(final float dt) {
@@ -78,7 +77,7 @@ public class Pyret extends Sprite
     }
 
     public State getState() {
-        if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0) && previousState == State.JUMPING)
+        if(b2body.getLinearVelocity().y > 0) //|| (b2body.getLinearVelocity().y < 0) && previousState == State.JUMPING)
             return State.JUMPING;
         else if(b2body.getLinearVelocity().y < 0)
             return State.FALLING;
@@ -91,34 +90,45 @@ public class Pyret extends Sprite
     private void initAnimations() {
         frames = new Array<TextureRegion>();
         //RUNNING
-        for (int i = 0; i < 6; i++)
-            frames.add(new TextureRegion(getTexture(), 40 + i * 300, 350, 300, 200));
-        pyretRun = new Animation(0.08f, frames);
+        frames.add(new TextureRegion(getTexture(), 62,  372, 257, 178));
+        frames.add(new TextureRegion(getTexture(), 358, 377, 254, 167));
+        frames.add(new TextureRegion(getTexture(), 666,  373, 260, 166));
+        frames.add(new TextureRegion(getTexture(), 952,  361, 259, 177));
+        frames.add(new TextureRegion(getTexture(), 1278,  371, 266, 158));
+        frames.add(new TextureRegion(getTexture(), 1589,  375, 254, 171));
+
+
+        pyretRun = new Animation(0.09f, frames);
         frames.clear();
         //JUMPING
-        frames.add(new TextureRegion(getTexture(), 80, 1595, 260, 170));
-        frames.add(new TextureRegion(getTexture(), 420, 1530, 260, 210));
-        frames.add(new TextureRegion(getTexture(), 750, 1425, 260, 215));
-        frames.add(new TextureRegion(getTexture(), 1080, 1380, 270, 300));
-        frames.add(new TextureRegion(getTexture(), 1420, 1355, 260, 175));
+        frames.add(new TextureRegion(getTexture(), 84, 1597, 253, 167));
+        frames.add(new TextureRegion(getTexture(), 423, 1536, 249, 203));
+        frames.add(new TextureRegion(getTexture(), 751, 1430, 253, 209));
+        frames.add(new TextureRegion(getTexture(), 1086, 1384, 262, 193));
+        frames.add(new TextureRegion(getTexture(), 1426, 1358, 254, 171));
         //The fall
-        frames.add(new TextureRegion(getTexture(), 1780, 1370, 260, 180));
-        frames.add(new TextureRegion(getTexture(), 2120, 1480, 265, 200));
-        frames.add(new TextureRegion(getTexture(), 2465, 1590, 260, 175));
-        pyretJump = new Animation(0.08f, frames);
+        frames.add(new TextureRegion(getTexture(), 1781, 1375, 254, 172));
+        frames.add(new TextureRegion(getTexture(), 2126, 1482, 257, 196));
+        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
+        pyretJump = new Animation(0.07f, frames);
         frames.clear();
         //FALLING
-        frames.add(new TextureRegion(getTexture(), 1780, 1370, 260, 180));
-        frames.add(new TextureRegion(getTexture(), 2120, 1480, 265, 200));
-        frames.add(new TextureRegion(getTexture(), 2465, 1590, 260, 175));
-        pyretFalling = new Animation(0.08f, frames);
+        frames.add(new TextureRegion(getTexture(), 1781, 1375, 254, 172));
+        frames.add(new TextureRegion(getTexture(), 2126, 1482, 257, 196));
+        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
+        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
+        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
+        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
+        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
+        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
+        pyretFalling = new Animation(0.7f, frames);
         frames.clear();
         //STANDING
-        frames.add(new TextureRegion(getTexture(), 56, 68, 260, 270));
-        frames.add(new TextureRegion(getTexture(), 366, 69, 260, 270));
-        frames.add(new TextureRegion(getTexture(), 675, 70, 260, 270));
-        frames.add(new TextureRegion(getTexture(), 989, 70, 260, 270));
-        pyretStanding = new Animation(0.3f, frames);
+        frames.add(new TextureRegion(getTexture(), 58, 70, 257, 163));
+        frames.add(new TextureRegion(getTexture(), 367, 71, 257, 162));
+        frames.add(new TextureRegion(getTexture(), 677, 72, 257, 161));
+        frames.add(new TextureRegion(getTexture(), 991, 72, 257, 161));
+        pyretStanding = new Animation(0.7f, frames);
 
 
 
@@ -128,7 +138,7 @@ public class Pyret extends Sprite
 
     private void definePyret() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / PyroGame.PPM, 32 / PyroGame.PPM);
+        bdef.position.set(32 / PyroGame.PPM, 100 / PyroGame.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -136,7 +146,7 @@ public class Pyret extends Sprite
         FixtureDef fdef = new FixtureDef();
 
         CircleShape shape = new CircleShape();
-        shape.setRadius(8 / PyroGame.PPM);
+        shape.setRadius(12 / PyroGame.PPM);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

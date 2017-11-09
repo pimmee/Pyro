@@ -1,4 +1,4 @@
-package com.pimme.game.sprites;
+package com.pimme.game.entities;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;

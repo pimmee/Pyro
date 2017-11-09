@@ -1,8 +1,6 @@
 package com.pimme.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pimme.game.screens.PlayScreen;
@@ -10,16 +8,14 @@ import com.pimme.game.screens.PlayScreen;
 public class PyroGame extends Game
 {
 	public SpriteBatch batch;
-	public static final int V_WIDTH = 300;
-	public static final int V_HEIGHT = 200;
+	public static final int V_WIDTH = 500;
+	public static final int V_HEIGHT = 300;
 	public static final float PPM = 100; // pixel per meter
 	Texture img;
-	
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		//img = new Texture("badlogic.jpg");
-
 		setScreen(new PlayScreen(this));
 	}
 
@@ -27,10 +23,10 @@ public class PyroGame extends Game
 	public void render () {
 		super.render();
 	}
-	
+
 	@Override
 	public void dispose () {
-	    	super.dispose();
+		super.dispose();
 		batch.dispose();
 		img.dispose();
 	}
