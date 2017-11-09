@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -17,6 +18,7 @@ public abstract class InteractiveObject
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
+    protected Fixture fixture;
 
     public InteractiveObject(World world, TiledMap map, Rectangle bounds) {
 	this.world = world;
@@ -33,7 +35,9 @@ public abstract class InteractiveObject
 
 	shape.setAsBox(bounds.getWidth() / 2 / PyroGame.PPM, bounds.getHeight() / 2 / PyroGame.PPM); // start at x and goes all directions
 	fdef.shape = shape;
-	body.createFixture(fdef);
+	fixture = body.createFixture(fdef);
 
     }
+
+    public abstract void onCollision();
 }

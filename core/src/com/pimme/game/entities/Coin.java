@@ -9,5 +9,10 @@ public class Coin extends InteractiveObject
     public Coin(final World world, final TiledMap map, final Rectangle bounds)
     {
 	super(world, map, bounds);
+	fixture.setUserData(this);
+    }
+
+    @Override public void onCollision() {
+
     }
 }

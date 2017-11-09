@@ -1,35 +1,42 @@
 package com.pimme.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
 import com.pimme.game.entities.Pyret;
+import com.pimme.game.entities.Pyret.State;
 import com.pimme.game.tools.B2WorldCreator;
 
 public class PlayScreen implements Screen
 {
+    public static final float X_VEL= 0.08f;
+    public static final float JUMP_VEL = 3.5f;
+    private float WATER_HEIGHT = 0f;
     private PyroGame game;
     private OrthographicCamera gameCam;
     Texture texture;
-    private StretchViewport gamePort;
+    private FitViewport gamePort;
     private TextureAtlas atlas;
 
     // Tiled map variables
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private ShapeRenderer shapeRenderer;
 
     //Box2d variables
     private World world;
@@ -46,16 +53,17 @@ public class PlayScreen implements Screen
         gameCam.zoom = 2f;
 
         // FitViewPort to maintain virtual aspect ratios despite screen size
-        gamePort = new StretchViewport(PyroGame.V_WIDTH / PyroGame.PPM,PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
+        gamePort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
 
 
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
+        shapeRenderer = new ShapeRenderer();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-        world = new World(new Vector2(0, -10), true); // 1 parameter gravity, 2 sleep objects at rest
+        world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
         atlas = new TextureAtlas("puppy_pack.atlas");
         player = new Pyret(world, this);
@@ -74,7 +82,7 @@ public class PlayScreen implements Screen
     public void update(final float dt) {
         handleInput(dt);
 
-        world.step(1/60f, 6, 2);
+        world.step(1/ 60f, 6, 2);
         player.update(dt);
         gameCam.position.x = player.b2body.getPosition().x;
         gameCam.update();
@@ -82,30 +90,45 @@ public class PlayScreen implements Screen
     }
 
     public void handleInput(final float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player.b2body.applyLinearImpulse(new Vector2(0, 3.5f), player.b2body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
-            player.b2body.applyLinearImpulse(new Vector2(0.08f, 0), player.b2body.getWorldCenter(), true);
+        if (Gdx.input.isKeyJustPressed(Keys.UP) && player.getState() != State.JUMPING && player.getState() != State.FALLING)
+            player.b2body.applyLinearImpulse(new Vector2(0, JUMP_VEL), player.b2body.getWorldCenter(), true);
+        if(Gdx.input.isKeyPressed(Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2)
+            player.b2body.applyLinearImpulse(new Vector2(X_VEL, 0), player.b2body.getWorldCenter(), true);
 
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
-            player.b2body.applyLinearImpulse(new Vector2(-0.08f, 0), player.b2body.getWorldCenter(), true);
+        if(Gdx.input.isKeyPressed(Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2)
+            player.b2body.applyLinearImpulse(new Vector2(-X_VEL, 0), player.b2body.getWorldCenter(), true);
 
     }
 
     @Override public void render(final float delta) {
         update(delta);
         //CLEAR SCREEN
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        //Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render game map
-        renderer.render();
+        renderer.render();  // renders textures to bodies
+        //b2dr.render(world, gameCam.combined);
+        drawWater();
 
-        b2dr.render(world, gameCam.combined);
+
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
         game.batch.end();
 
+    }
+
+    private void drawWater() {
+        //Draws water
+        if (player.getY() <= WATER_HEIGHT)         System.out.println("touching water!!");
+        WATER_HEIGHT += 0.001f;
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setProjectionMatrix(gameCam.combined);
+        shapeRenderer.begin(ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 1, 0.5f);
+        shapeRenderer.rect(0, 0, 10, WATER_HEIGHT);
+        shapeRenderer.end();
     }
 
     @Override public void resize(final int width, final int height) {
