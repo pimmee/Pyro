@@ -3,7 +3,7 @@ package com.pimme.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.pimme.game.screens.PlayScreen;
+import com.pimme.game.graphics.PlayScreen;
 
 public class PyroGame extends Game
 {

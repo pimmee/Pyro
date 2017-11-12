@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pimme.game.PyroGame;
 import com.pimme.game.entities.Brick;
-import com.pimme.game.entities.Coin;
+import com.pimme.game.entities.HealthPack;
 
 public class B2WorldCreator
 {
@@ -49,7 +49,13 @@ public class B2WorldCreator
 		for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
 			Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-			new Coin(world, map, rect);
+			bdef.type = BodyDef.BodyType.StaticBody;
+			bdef.position.set((rect.getX() + rect.getWidth() / 2) / PyroGame.PPM, (rect.getY() + rect.getHeight() / 2) / PyroGame.PPM);
+			body = world.createBody(bdef);
+
+			shape.setAsBox(rect.getWidth() / 2 / PyroGame.PPM, rect.getHeight() / 2 / PyroGame.PPM); // start at x and goes all directions
+			fdef.shape = shape;
+			body.createFixture(fdef);
 		}
 		//Bricks
 		for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {

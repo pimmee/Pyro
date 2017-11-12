@@ -1,4 +1,4 @@
-package com.pimme.game.screens;
+package com.pimme.game.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -17,8 +17,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
-import com.pimme.game.entities.Pyret;
-import com.pimme.game.entities.Pyret.State;
+import com.pimme.game.entities.Player;
+import com.pimme.game.entities.Player.State;
 import com.pimme.game.tools.B2WorldCreator;
 
 public class PlayScreen implements Screen
@@ -43,7 +43,7 @@ public class PlayScreen implements Screen
     private Box2DDebugRenderer b2dr;
     private B2WorldCreator worldCreator;
 
-    private Pyret player;
+    private Player player;
 
     public PlayScreen(PyroGame game) {
         this.game = game;
@@ -66,7 +66,7 @@ public class PlayScreen implements Screen
         world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
         atlas = new TextureAtlas("puppy_pack.atlas");
-        player = new Pyret(world, this);
+        player = new Player(world, this);
 
         worldCreator = new B2WorldCreator(world, map);
 
@@ -120,8 +120,8 @@ public class PlayScreen implements Screen
 
     private void drawWater() {
         //Draws water
-        if (player.getY() <= WATER_HEIGHT)         System.out.println("touching water!!");
-        WATER_HEIGHT += 0.001f;
+        if (player.getY() <= WATER_HEIGHT)
+            WATER_HEIGHT += 0.001f;
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.setProjectionMatrix(gameCam.combined);
@@ -129,6 +129,10 @@ public class PlayScreen implements Screen
         shapeRenderer.setColor(0, 0, 1, 0.5f);
         shapeRenderer.rect(0, 0, 10, WATER_HEIGHT);
         shapeRenderer.end();
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     @Override public void resize(final int width, final int height) {

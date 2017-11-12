@@ -10,9 +10,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.pimme.game.PyroGame;
-import com.pimme.game.screens.PlayScreen;
+import com.pimme.game.graphics.PlayScreen;
 
-public class Pyret extends Sprite
+public class Player extends Sprite
 {
     public enum State { FALLING, JUMPING, STANDING, RUNNING}
     public State currentState;
@@ -27,7 +27,7 @@ public class Pyret extends Sprite
     private boolean runningRight;
     private Array<TextureRegion> frames;
 
-    public Pyret(World world, PlayScreen screen) {
+    public Player(World world, PlayScreen screen) {
         super(screen.getAtlas().findRegion("Dog_Jump"));
         this.world = world;
         currentState = State.STANDING;
