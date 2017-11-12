@@ -45,6 +45,10 @@ public class Player extends Sprite
         setRegion(getFrame(dt));
     }
 
+    public void reduceHealth() {
+
+    }
+
     public TextureRegion getFrame(final float dt) {
         currentState = getState();
 

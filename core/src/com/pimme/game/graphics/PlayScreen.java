@@ -1,4 +1,4 @@
-package com.pimme.game.graphics;
+package com.pimme.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -16,6 +16,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.pimme.game.PyroGame;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
@@ -27,9 +29,9 @@ public class PlayScreen implements Screen
     public static final float JUMP_VEL = 3.5f;
     private float WATER_HEIGHT = 0f;
     private PyroGame game;
-    private OrthographicCamera gameCam;
+    private OrthographicCamera camera;
     Texture texture;
-    private FitViewport gamePort;
+    private StretchViewport gamePort;
     private TextureAtlas atlas;
 
     // Tiled map variables
@@ -49,11 +51,10 @@ public class PlayScreen implements Screen
         this.game = game;
         texture = new Texture("badlogic.jpg");
         // cam to follow character
-        gameCam = new OrthographicCamera();
-        gameCam.zoom = 2f;
+        camera = new OrthographicCamera();
 
         // FitViewPort to maintain virtual aspect ratios despite screen size
-        gamePort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
+        gamePort = new StretchViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, camera);
 
 
         // Load our map and setup map renderer
@@ -61,7 +62,7 @@ public class PlayScreen implements Screen
         map = mapLoader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
-        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+        camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
@@ -84,9 +85,10 @@ public class PlayScreen implements Screen
 
         world.step(1/ 60f, 6, 2);
         player.update(dt);
-        gameCam.position.x = player.b2body.getPosition().x;
-        gameCam.update();
-        renderer.setView(gameCam);
+        if(player.b2body.getPosition().x > PyroGame.V_WIDTH / PyroGame.PPM/ 2)
+            camera.position.x = player.b2body.getPosition().x;
+        camera.update();
+        renderer.setView(camera);
     }
 
     public void handleInput(final float dt) {
@@ -107,11 +109,11 @@ public class PlayScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render game map
         renderer.render();  // renders textures to bodies
-        //b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, camera.combined);
         drawWater();
 
 
-        game.batch.setProjectionMatrix(gameCam.combined);
+        game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         player.draw(game.batch);
         game.batch.end();
@@ -121,18 +123,15 @@ public class PlayScreen implements Screen
     private void drawWater() {
         //Draws water
         if (player.getY() <= WATER_HEIGHT)
-            WATER_HEIGHT += 0.001f;
+            player.reduceHealth();
+        WATER_HEIGHT += 0.001f;
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.setProjectionMatrix(gameCam.combined);
+        shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(0, 0, 1, 0.5f);
         shapeRenderer.rect(0, 0, 10, WATER_HEIGHT);
         shapeRenderer.end();
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     @Override public void resize(final int width, final int height) {
