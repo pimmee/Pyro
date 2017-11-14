@@ -51,6 +51,10 @@ public class Player extends Sprite
         if(outOfBounds()) definePyret();
     }
 
+    public void reduceHealth() {
+
+    }
+
     public TextureRegion getFrame(final float dt) {
         currentState = getState();
 
