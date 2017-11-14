@@ -7,9 +7,9 @@ import com.pimme.game.graphics.PlayScreen;
 
 public class FlyPowerup extends InteractiveObject
 {
-    public FlyPowerup(final World world, final TiledMap map, final Rectangle bounds)
+    public FlyPowerup(final PlayScreen screen, final World world, final TiledMap map, final Rectangle bounds)
     {
-	super(world, map, bounds);
+	super(screen, world, map, bounds);
 	fixture.setUserData(this);
     }
 

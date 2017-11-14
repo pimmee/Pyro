@@ -9,7 +9,7 @@ public class HealthPack extends InteractiveObject
 {
     public HealthPack(final PlayScreen screen, final World world, final TiledMap map, final Rectangle bounds)
     {
-	super(world, map, bounds);
+	super(screen, world, map, bounds);
 	fixture.setUserData(this);
     }
 

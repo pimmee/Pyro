@@ -3,12 +3,7 @@ package com.pimme.game.entities;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.pimme.game.PyroGame;
 import com.pimme.game.graphics.PlayScreen;
 
@@ -22,7 +17,8 @@ public abstract class InteractiveObject
 	protected Fixture fixture;
 	protected PlayScreen screen;
 
-	public InteractiveObject(World world, TiledMap map, Rectangle bounds) {
+	public InteractiveObject(PlayScreen screen, World world, TiledMap map, Rectangle bounds) {
+		this.screen = screen;
 		this.world = world;
 		this.map = map;
 		this.bounds = bounds;
@@ -38,8 +34,8 @@ public abstract class InteractiveObject
 		shape.setAsBox(bounds.getWidth() / 2 / PyroGame.PPM, bounds.getHeight() / 2 / PyroGame.PPM); // start at x and goes all directions
 		fdef.shape = shape;
 		fixture = body.createFixture(fdef);
-
 	}
 
 	public abstract void onCollision();
+
 }
