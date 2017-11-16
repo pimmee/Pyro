@@ -16,8 +16,8 @@ public class Player extends Sprite
     private static final float SPEED = 7;
     private static final float JUMP_VEL = 4.4f;
 
-    public enum State { FALLING, JUMPING, STANDING, RUNNING}
-    private State currentState;
+    public enum State { FALLING, JUMPING, STANDING, RUNNING, DEAD}
+    public State currentState;
     private State previousState;
     public World world;
     public Body b2body;
@@ -48,7 +48,8 @@ public class Player extends Sprite
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
 
-        if(outOfBounds()) definePyret();
+        if(outOfBounds())
+            currentState = State.DEAD;
     }
 
     public void reduceHealth() {
@@ -179,7 +180,8 @@ public class Player extends Sprite
     }
 
     public void bounce() {
-        b2body.applyLinearImpulse(new Vector2(0, 10), b2body.getWorldCenter(), true);
+
+        b2body.setLinearVelocity(b2body.getLinearVelocity().x, 8f);
 
     }
 }

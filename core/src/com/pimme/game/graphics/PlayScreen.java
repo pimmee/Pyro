@@ -58,8 +58,8 @@ public class PlayScreen implements Screen
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
         //map = mapLoader.load("level1.tmx");
-        //map = mapLoader.load("bounce_map.tmx");
-        map = mapLoader.load("map1.tmx");
+        map = mapLoader.load("bounce_map.tmx");
+//        map = mapLoader.load("map1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
@@ -108,6 +108,11 @@ public class PlayScreen implements Screen
         player.draw(game.batch);
         game.batch.end();
 
+        if(gameOver()) {
+            game.setScreen(new GameOverScreen(game));
+            dispose();
+        }
+
     }
 
     private void drawWater() {
@@ -126,6 +131,10 @@ public class PlayScreen implements Screen
 
     public Player getPlayer() {
         return player;
+    }
+
+    private boolean gameOver() {
+        return(player.currentState == State.DEAD);
     }
 
     @Override public void resize(final int width, final int height) {
