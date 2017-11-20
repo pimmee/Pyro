@@ -24,15 +24,12 @@ public class B2WorldCreator
 		Body body;
 
 //		for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
-//			Rectangle rect = ((RectangleMapObject) object).getRectangle();
+//			Rectangle bounds = ((RectangleMapObject) object).getRectangle();
 //
-//			bdef.type = BodyDef.BodyType.StaticBody;
-//			bdef.position.set((rect.getX() + rect.getWidth() / 2) / PyroGame.PPM, (rect.getY() + rect.getHeight() / 2) / PyroGame.PPM);
-//			body = world.createBody(bdef);
+//			new Brick(screen, world, map, bounds);
+//		    System.out.println("height: " + bounds.getHeight());
+//		    System.out.println("width: " + bounds.getWidth());
 //
-//			shape.setAsBox(rect.getWidth() / 2 / PyroGame.PPM, rect.getHeight() / 2 / PyroGame.PPM); // start at x and goes all directions
-//			fdef.shape = shape;
-//			body.createFixture(fdef);
 //		}
 
 		for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {

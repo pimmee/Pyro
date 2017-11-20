@@ -1,43 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="20" height="100" tilewidth="64" tileheight="64" nextobjectid="28">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="20" height="100" tilewidth="64" tileheight="64" nextobjectid="56">
  <tileset firstgid="1" source="spingboard.tsx"/>
  <tileset firstgid="2" name="cartoon-space-background-wallpaper" tilewidth="1920" tileheight="1200" tilecount="1" columns="1">
   <image source="cartoon-space-background-wallpaper.jpg" trans="000000" width="1920" height="1200"/>
  </tileset>
- <layer name="background" width="20" height="100">
-  <data encoding="base64" compression="zlib">
-   eJzt1MEJAEAIBDGx/6Jt4J4HLpJUMK+pgjt6OwCAJ38GyOTPAJn8GSCTPwNk+v3nAcvAAA0=
-  </data>
- </layer>
+ <tileset firstgid="3" source="gray_tile.tsx"/>
  <layer name="Tile Layer 1" width="20" height="100">
   <data encoding="base64" compression="zlib">
-   eJzt0skNwCAQBEHIP2leDsAIew+qJP4wzRg8ZvQFNlW992mdd/A2KtE0N31y0yeO7e+gcz+afsOud9A5ju1j2T83fXp629U/+Jc+seyZky71zMNnAYV7ACs=
+   eJzt2dEKgCAMBdDE///nCHroIdPpyLu7O/D1sDF0ZvXwi3qvqF5x9qwx67XyRslP3rr31mOk/Fa80X3HUm8Gz3qW9ryZkNeOkf4w1RvNYz7v0T3Noxxer8+785Nn9yz3DoZ6//I0j3J4zz4j5sfsaR7t9aK+/2XxtD84Pev31szb0pfnFaye9f/CbH9Q6kXz9B6B6WkexfSK07qsEw6OAoA=
   </data>
  </layer>
+ <objectgroup name="walls">
+  <object id="28" x="58" y="0" width="8" height="6400"/>
+  <object id="33" x="1218" y="0" width="8" height="6400"/>
+ </objectgroup>
  <objectgroup name="bounce">
-  <object id="1" x="446" y="202" width="76" height="26"/>
-  <object id="2" x="832" y="330" width="74" height="28"/>
-  <object id="3" x="894" y="716" width="76" height="26"/>
-  <object id="4" x="1218" y="524" width="68" height="24"/>
-  <object id="7" x="578" y="906" width="68" height="24"/>
-  <object id="8" x="386" y="1292" width="68" height="24"/>
-  <object id="9" x="642" y="1612" width="68" height="24"/>
-  <object id="10" x="898" y="1934" width="68" height="24"/>
-  <object id="11" x="578" y="2252" width="68" height="24"/>
-  <object id="12" x="706" y="2636" width="68" height="24"/>
-  <object id="13" x="514" y="3020" width="68" height="24"/>
-  <object id="14" x="898" y="3276" width="68" height="24"/>
-  <object id="15" x="1026" y="3660" width="68" height="24"/>
-  <object id="16" x="706" y="3980" width="68" height="24"/>
-  <object id="17" x="450" y="4302" width="68" height="24"/>
-  <object id="18" x="706" y="4620" width="68" height="24"/>
-  <object id="19" x="578" y="5004" width="68" height="24"/>
+  <object id="1" x="446" y="202" width="67" height="3"/>
   <object id="20" x="68" y="5068" width="68" height="24"/>
-  <object id="21" x="834" y="5326" width="68" height="24"/>
-  <object id="22" x="322" y="5388" width="68" height="24"/>
-  <object id="23" x="578" y="5644" width="68" height="24"/>
-  <object id="24" x="704" y="5964" width="68" height="24"/>
-  <object id="27" x="2" y="6346" width="1280" height="22"/>
+  <object id="34" x="833.5" y="334.5" width="67" height="3"/>
+  <object id="35" x="897.5" y="718.5" width="67" height="3"/>
+  <object id="36" x="577.5" y="909.5" width="67" height="3"/>
+  <object id="37" x="386.5" y="1294.5" width="67" height="3"/>
+  <object id="38" x="642.5" y="1615.5" width="67" height="3"/>
+  <object id="39" x="899.5" y="1933.5" width="67" height="3"/>
+  <object id="40" x="576.5" y="2253.5" width="67" height="3"/>
+  <object id="41" x="706.5" y="2638.5" width="67" height="3"/>
+  <object id="42" x="513.5" y="3023.5" width="67" height="3"/>
+  <object id="43" x="899.5" y="3278.5" width="67" height="3"/>
+  <object id="44" x="1026.5" y="3664.5" width="67" height="3"/>
+  <object id="45" x="707.5" y="3981.5" width="67" height="3"/>
+  <object id="46" x="449.5" y="4300.5" width="67" height="3"/>
+  <object id="47" x="705.5" y="4621.5" width="67" height="3"/>
+  <object id="48" x="577.5" y="5006.5" width="67" height="3"/>
+  <object id="49" x="834.5" y="5325.5" width="67" height="3"/>
+  <object id="50" x="321.5" y="5389.5" width="67" height="3"/>
+  <object id="51" x="577.5" y="5646.5" width="67" height="3"/>
+  <object id="52" x="705.5" y="5968.5" width="67" height="3"/>
+  <object id="53" x="68" y="6351" width="1152" height="8"/>
  </objectgroup>
  <objectgroup name="coin"/>
 </map>

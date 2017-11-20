@@ -15,12 +15,13 @@ public class Player extends Sprite
 {
     private static final float SPEED = 7;
     private static final float JUMP_VEL = 4.4f;
+    private static final float FLY_VEL = 2.2f;
 
-    public enum State { FALLING, JUMPING, STANDING, RUNNING, DEAD}
+    public enum State { FALLING, JUMPING, STANDING, RUNNING, FLYING, SWIMMING, DEAD}
     public State currentState;
     private State previousState;
     public World world;
-    public Body b2body;
+    public Body body;
     private Animation pyretRun;
     private Animation pyretJump;
     private Animation pyretFalling;
@@ -45,15 +46,11 @@ public class Player extends Sprite
 
     public void update(final float dt) {
         handleInput(dt);
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
 
         if(outOfBounds())
             currentState = State.DEAD;
-    }
-
-    public void reduceHealth() {
-
     }
 
     public TextureRegion getFrame(final float dt) {
@@ -74,11 +71,11 @@ public class Player extends Sprite
                 region = (TextureRegion) pyretStanding.getKeyFrame(stateTimer, true);
                 break;
         }
-        if((b2body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) { //If running to the left but faceing right
+        if((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) { //If running to the left but faceing right
             region.flip(true, false);
             runningRight = false;
         }
-        else if((b2body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+        else if((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
             region.flip(true, false);
             runningRight = true;
         }
@@ -88,22 +85,22 @@ public class Player extends Sprite
     }
 
     public State getState() {
-        if(b2body.getLinearVelocity().y > 0) //|| (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
+        if(body.getLinearVelocity().y > 0) //|| (body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
-        else if(b2body.getLinearVelocity().y < 0)
+        else if(body.getLinearVelocity().y < 0)
             return State.FALLING;
-        else if(b2body.getLinearVelocity().x != 0)
+        else if(body.getLinearVelocity().x != 0)
             return State.RUNNING;
         else
             return State.STANDING;
     }
 
     public void handleInput(final float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && getState() != State.JUMPING && getState() != State.FALLING)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
             jump();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && b2body.getLinearVelocity().x <= 2)
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && body.getLinearVelocity().x <= 2)
             moveRight(dt);
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && b2body.getLinearVelocity().x >= -2)
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && body.getLinearVelocity().x >= -2)
             moveLeft(dt);
     }
 
@@ -146,9 +143,9 @@ public class Player extends Sprite
 
     private void definePyret() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(32 / PyroGame.PPM, 100 / PyroGame.PPM);
+        bdef.position.set(100 / PyroGame.PPM, 100 / PyroGame.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -156,32 +153,29 @@ public class Player extends Sprite
 
         fdef.shape = shape;
 
-        b2body.createFixture(fdef).setUserData("pyret");
-    }
-
-    public void reduceHealth(int amount) {
-        health -= amount;
+        body.createFixture(fdef).setUserData("pyret");
     }
 
     public boolean outOfBounds() {
-        return b2body.getPosition().x < 0 || b2body.getPosition().x > 1000 || b2body.getPosition().y < 0 || b2body.getPosition().y > 1000;
+        return body.getPosition().x < 0 || body.getPosition().x > 1000 || body.getPosition().y < 0 || body.getPosition().y > 1000;
     }
 
     public void jump() {
-        b2body.applyLinearImpulse(new Vector2(0, JUMP_VEL), b2body.getWorldCenter(), true);
+        if  (currentState == State.STANDING || currentState == State.RUNNING)
+        body.applyLinearImpulse(new Vector2(0, JUMP_VEL), body.getWorldCenter(), true);
+        else if (currentState == State.FLYING || currentState == State.SWIMMING)
+            body.applyLinearImpulse(new Vector2(0, FLY_VEL), body.getWorldCenter(), true);
     }
 
     public void moveLeft(float dt) {
-        b2body.applyLinearImpulse(new Vector2(-SPEED * dt, 0), b2body.getWorldCenter(), true);
+        body.applyLinearImpulse(new Vector2(-SPEED * dt, 0), body.getWorldCenter(), true);
     }
 
     public void moveRight(float dt) {
-        b2body.applyLinearImpulse(new Vector2(SPEED * dt, 0), b2body.getWorldCenter(), true);
+        body.applyLinearImpulse(new Vector2(SPEED * dt, 0), body.getWorldCenter(), true);
     }
 
     public void bounce() {
-
-        b2body.setLinearVelocity(b2body.getLinearVelocity().x, 8f);
-
+        body.setLinearVelocity(body.getLinearVelocity().x, 8f);
     }
 }

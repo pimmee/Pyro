@@ -1,13 +1,16 @@
 package com.pimme.game.graphics;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pimme.game.PyroGame;
+import com.pimme.game.entities.Player;
 
 
 /**
@@ -15,20 +18,26 @@ import com.pimme.game.PyroGame;
  */
 public class Hud {
 
+    private PlayScreen screen;
     private Stage stage;
     private Viewport viewPort;
 
-    private float hp;
+    private ShapeRenderer shapeRenderer;
+
+    private float hp = 100;
+    private int score = 0;
     private Label hpLabel;
     private Label levelLabel;
 
-    public Hud(SpriteBatch batch) {
-        hp = 100;
+    public Hud(PlayScreen screen, SpriteBatch batch) {
+        this.screen = screen;
 
         //setup the HUD viewport using a new camera seperate from our gamecam
         //define our stage using that viewport and our games spritebatch
         viewPort = new FitViewport(PyroGame.V_WIDTH, PyroGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewPort, batch);
+
+        shapeRenderer = new ShapeRenderer();
 
         //table to organize our hud's labels
         Table table = new Table();
@@ -36,6 +45,50 @@ public class Hud {
         table.top();
         //make the table fill the entire stage
         table.setFillParent(true);
-        batch.begin();
+    }
+
+    public void render() {
+        renderHealthBar();
+    }
+
+    private void renderHealthBar() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setProjectionMatrix(viewPort.getCamera().combined);
+        shapeRenderer.setColor(Color.RED);
+        roundedRect(PyroGame.V_WIDTH - 15, 0, 10, 100, 3);
+        shapeRenderer.setColor(Color.GREEN);
+        roundedRect(PyroGame.V_WIDTH - 15, 0, 10, hp, 3);
+
+        shapeRenderer.end();
+    }
+
+    public void roundedRect(float x, float y, float width, float height, float radius){
+        // Central rectangle
+        shapeRenderer.rect(x + radius, y + radius, width - 2*radius, height - 2*radius);
+
+        // Four side rectangles, in clockwise order
+        shapeRenderer.rect(x + radius, y, width - 2*radius, radius);
+        shapeRenderer.rect(x + width - radius, y + radius, radius, height - 2*radius);
+        shapeRenderer.rect(x + radius, y + height - radius, width - 2*radius, radius);
+        shapeRenderer.rect(x, y + radius, radius, height - 2*radius);
+
+        // Four arches, clockwise too
+        shapeRenderer.arc(x + radius, y + radius, radius, 180f, 90f);
+        shapeRenderer.arc(x + width - radius, y + radius, radius, 270f, 90f);
+        shapeRenderer.arc(x + width - radius, y + height - radius, radius, 0f, 90f);
+        shapeRenderer.arc(x + radius, y + height - radius, radius, 90f, 90f);
+    }
+
+    public void reduceHealth(float amount) {
+        hp -= amount;
+        if (hp <= 0) screen.getPlayer().currentState = Player.State.DEAD;
+    }
+
+    public void addScore(int amount) {
+        score += amount;
+    }
+
+    public void addHealth(int amount) {
+        hp += amount;
     }
 }

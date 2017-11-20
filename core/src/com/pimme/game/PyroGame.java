@@ -19,6 +19,7 @@ public class PyroGame extends Game
 	public static final short BOUNCE_BIT = 16;
 	public static final short FLY_BIT = 32;
 
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

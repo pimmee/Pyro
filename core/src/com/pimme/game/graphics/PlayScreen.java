@@ -1,7 +1,6 @@
 package com.pimme.game.graphics;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,10 +16,14 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
+import com.pimme.game.entities.Coin;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
 import com.pimme.game.tools.B2WorldCreator;
 import com.pimme.game.tools.CollisionListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayScreen implements Screen
 {
@@ -43,6 +46,8 @@ public class PlayScreen implements Screen
     private B2WorldCreator worldCreator;
 
     private Player player;
+    private Hud hud;
+    private List<Coin> coins = new ArrayList<Coin>();
 
     public PlayScreen(PyroGame game) {
         this.game = game;
@@ -58,8 +63,8 @@ public class PlayScreen implements Screen
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
         //map = mapLoader.load("level1.tmx");
-        map = mapLoader.load("bounce_map.tmx");
-//        map = mapLoader.load("map1.tmx");
+        //map = mapLoader.load("bounce_map.tmx");
+	map = mapLoader.load("map1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
@@ -68,6 +73,7 @@ public class PlayScreen implements Screen
         b2dr = new Box2DDebugRenderer();
         atlas = new TextureAtlas("puppy_pack.atlas");
         player = new Player(world, this);
+        hud = new Hud(this, game.batch);
 
         worldCreator = new B2WorldCreator(this, world, map);
         world.setContactListener(new CollisionListener());
@@ -84,8 +90,8 @@ public class PlayScreen implements Screen
     public void update(final float dt) {
         world.step(1/ 60f, 6, 2);
         player.update(dt);
-        gameCam.position.x = player.b2body.getPosition().x;
-        gameCam.position.y = player.b2body.getPosition().y;
+        gameCam.position.x = player.body.getPosition().x;
+        gameCam.position.y = player.body.getPosition().y;
         gameCam.update();
         renderer.setView(gameCam);
     }
@@ -101,6 +107,7 @@ public class PlayScreen implements Screen
         renderer.render();  // renders textures to bodies
         b2dr.render(world, gameCam.combined);
         drawWater();
+        hud.render();
 
 
         game.batch.setProjectionMatrix(gameCam.combined);
@@ -119,7 +126,7 @@ public class PlayScreen implements Screen
         //Draws water
         WATER_HEIGHT += 0.001f;
         if (player.getY() <= WATER_HEIGHT)
-            player.reduceHealth(1);
+            hud.reduceHealth(0.2f);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.setProjectionMatrix(gameCam.combined);
@@ -132,7 +139,15 @@ public class PlayScreen implements Screen
     public Player getPlayer() {
         return player;
     }
+    public Hud getHud() { return hud; }
+    public void addCoin(Coin coin) {
+        coins.add(coin);
+    }
 
+    public void removeCoin(Coin coin) {
+        coins.remove(coin);
+    }
+    public Iterable<Coin> getCoins() { return coins; }
     private boolean gameOver() {
         return(player.currentState == State.DEAD);
     }

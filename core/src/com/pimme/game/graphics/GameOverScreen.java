@@ -19,11 +19,11 @@ import com.badlogic.gdx.graphics.Color;
  * Created by smurf on 2017-11-16.
  */
 public class GameOverScreen implements Screen {
-    private PyroGame game;
+    private final PyroGame game;
     private Viewport viewPort;
     private Stage stage;
 
-    public GameOverScreen(PyroGame game) {
+    public GameOverScreen(final PyroGame game) {
         this.game = game;
         viewPort = new FitViewport(PyroGame.V_WIDTH, PyroGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewPort, game.batch);
@@ -34,13 +34,25 @@ public class GameOverScreen implements Screen {
         table.center();
         table.setFillParent(true);
 
+
+//        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+//
+//        TextButton playAgainButton = new TextButton("Play again", style);
+//        playAgainButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent e, float x, float y) {
+//                game.setScreen(new PlayScreen(game));
+//                dispose();
+//            }
+//        });
         Label gameOverLabel = new Label("GAME OVER", font);
         Label playAgainLabel = new Label("PLAY AGAIN", font);
 
         table.add(gameOverLabel).expandX();
         table.row();
         table.add(playAgainLabel).expandX().padTop(10f);
-
+//        table.add(playAgainButton).expandX().padTop(15f);
+//        Gdx.input.setInputProcessor(stage);
         stage.addActor(table);
     }
     @Override

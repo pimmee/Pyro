@@ -7,7 +7,7 @@ import com.pimme.game.graphics.PlayScreen;
 
 public class Brick extends InteractiveObject
 {
-    public Brick(final PlayScreen screen, final World world, final TiledMap map, final Rectangle bounds)
+    public Brick(PlayScreen screen, final World world, final TiledMap map, final Rectangle bounds)
     {
 	super(screen, world, map, bounds);
 	fixture.setUserData(this);

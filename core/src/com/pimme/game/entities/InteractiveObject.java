@@ -17,7 +17,7 @@ public abstract class InteractiveObject
 	protected Fixture fixture;
 	protected PlayScreen screen;
 
-	public InteractiveObject(PlayScreen screen, World world, TiledMap map, Rectangle bounds) {
+	protected InteractiveObject(PlayScreen screen, World world, TiledMap map, Rectangle bounds) {
 		this.screen = screen;
 		this.world = world;
 		this.map = map;
