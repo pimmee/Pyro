@@ -2,6 +2,7 @@ package com.pimme.game.graphics;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,14 +20,17 @@ import com.pimme.game.entities.Player;
 public class Hud {
 
     private PlayScreen screen;
-    private Stage stage;
+    public Stage stage;
     private Viewport viewPort;
+
+    private static final int HP_WIDTH = 100;
+    private static final int HP_HEIGHT = 10;
 
     private ShapeRenderer shapeRenderer;
 
     private float hp = 100;
     private int score = 0;
-    private Label hpLabel;
+    private Label scoreLabel;
     private Label levelLabel;
 
     public Hud(PlayScreen screen, SpriteBatch batch) {
@@ -45,6 +49,11 @@ public class Hud {
         table.top();
         //make the table fill the entire stage
         table.setFillParent(true);
+
+        scoreLabel = new Label("SCORE: " + Integer.toString(score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        table.padLeft(PyroGame.V_WIDTH - scoreLabel.getWidth());
+        table.add(scoreLabel);
+        stage.addActor(table);
     }
 
     public void render() {
@@ -55,9 +64,9 @@ public class Hud {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setProjectionMatrix(viewPort.getCamera().combined);
         shapeRenderer.setColor(Color.RED);
-        roundedRect(PyroGame.V_WIDTH - 15, 0, 10, 100, 3);
+        roundedRect((PyroGame.V_WIDTH >> 1) - (HP_WIDTH >> 1), 0, HP_WIDTH, HP_HEIGHT, 3);
         shapeRenderer.setColor(Color.GREEN);
-        roundedRect(PyroGame.V_WIDTH - 15, 0, 10, hp, 3);
+        roundedRect((PyroGame.V_WIDTH >> 1) - (HP_WIDTH >> 1), 0, hp, HP_HEIGHT, 3);
 
         shapeRenderer.end();
     }
@@ -88,6 +97,7 @@ public class Hud {
         score += amount;
     }
 
+    public int getScore() { return score; }
     public void addHealth(int amount) {
         hp += amount;
     }

@@ -12,16 +12,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pimme.game.PyroGame;
 import com.badlogic.gdx.graphics.Color;
-
+import com.pimme.game.tools.Highscore;
 
 
 /**
  * Created by smurf on 2017-11-16.
  */
 public class GameOverScreen implements Screen {
-    private final PyroGame game;
+    private PyroGame game;
     private Viewport viewPort;
     private Stage stage;
+    private int score;
 
     public GameOverScreen(final PyroGame game) {
         this.game = game;
@@ -45,15 +46,21 @@ public class GameOverScreen implements Screen {
 //                dispose();
 //            }
 //        });
+        Highscore.load();
         Label gameOverLabel = new Label("GAME OVER", font);
-        Label playAgainLabel = new Label("PLAY AGAIN", font);
+        Label playAgainLabel = new Label("CLICK TO PLAY AGAIN", font);
+        Label scoreLabel = new Label("SCORE: " + score, font);
+        Label highScoreLabel = new Label("HIGHSCORE: " + Highscore.getHighscore(), font);
 
-        table.add(gameOverLabel).expandX();
-        table.row();
-        table.add(playAgainLabel).expandX().padTop(10f);
-//        table.add(playAgainButton).expandX().padTop(15f);
-//        Gdx.input.setInputProcessor(stage);
+        table.add(gameOverLabel).expandX().row();
+        table.add(playAgainLabel).expandX().row();
+        table.add(highScoreLabel).expandX().padTop(10f);
+
         stage.addActor(table);
+    }
+
+    public void setScore(int amount) {
+        score = amount;
     }
     @Override
     public void show() {

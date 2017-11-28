@@ -31,7 +31,7 @@ public class PlayScreen implements Screen
     private PyroGame game;
     private OrthographicCamera gameCam;
     Texture texture;
-    private FitViewport gamePort;
+    private FitViewport viewPort;
     private TextureAtlas atlas;
 
     // Tiled map variables
@@ -57,7 +57,7 @@ public class PlayScreen implements Screen
         gameCam.zoom = 2f;
 
         // FitViewPort to maintain virtual aspect ratios despite screen size
-        gamePort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
+        viewPort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
 
         System.out.println(Gdx.files.internal("level1test.tmx").file().getAbsolutePath());
         // Load our map and setup map renderer
@@ -67,7 +67,7 @@ public class PlayScreen implements Screen
 	map = mapLoader.load("map1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
-        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+        gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
 
         world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
@@ -90,10 +90,16 @@ public class PlayScreen implements Screen
     public void update(final float dt) {
         world.step(1/ 60f, 6, 2);
         player.update(dt);
-        gameCam.position.x = player.body.getPosition().x;
-        gameCam.position.y = player.body.getPosition().y;
+        setCameraPos();
         gameCam.update();
         renderer.setView(gameCam);
+    }
+
+    private void setCameraPos() {
+        if (player.body.getPosition().x > (PyroGame.V_WIDTH / PyroGame.PPM))
+            gameCam.position.x = player.body.getPosition().x;
+        else gameCam.position.x = PyroGame.V_WIDTH / PyroGame.PPM;
+        gameCam.position.y = player.body.getPosition().y;
     }
 
 
@@ -105,7 +111,7 @@ public class PlayScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render game map
         renderer.render();  // renders textures to bodies
-        b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, gameCam.combined);
         drawWater();
         hud.render();
 
@@ -115,7 +121,11 @@ public class PlayScreen implements Screen
         player.draw(game.batch);
         game.batch.end();
 
+        hud.stage.draw();
+
         if(gameOver()) {
+            GameOverScreen gameOverScreen = new GameOverScreen(game);
+            gameOverScreen.setScore(hud.getScore());
             game.setScreen(new GameOverScreen(game));
             dispose();
         }
@@ -153,7 +163,7 @@ public class PlayScreen implements Screen
     }
 
     @Override public void resize(final int width, final int height) {
-        gamePort.update(width, height);
+        viewPort.update(width, height);
     }
 
     @Override public void pause() {
