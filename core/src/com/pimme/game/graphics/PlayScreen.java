@@ -19,8 +19,8 @@ import com.pimme.game.PyroGame;
 import com.pimme.game.entities.Coin;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
-import com.pimme.game.tools.B2WorldCreator;
-import com.pimme.game.tools.CollisionListener;
+import com.pimme.game.tools.B2World;
+import com.pimme.game.tools.Highscore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class PlayScreen implements Screen
     //Box2d variables
     private World world;
     private Box2DDebugRenderer b2dr;
-    private B2WorldCreator worldCreator;
+    private B2World worldCreator;
 
     private Player player;
     private Hud hud;
@@ -64,7 +64,8 @@ public class PlayScreen implements Screen
         mapLoader = new TmxMapLoader();
         //map = mapLoader.load("level1.tmx");
         //map = mapLoader.load("bounce_map.tmx");
-	map = mapLoader.load("map1.tmx");
+	    //map = mapLoader.load("map1.tmx");
+        map = mapLoader.load("testing.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
         gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
@@ -75,8 +76,7 @@ public class PlayScreen implements Screen
         player = new Player(world, this);
         hud = new Hud(this, game.batch);
 
-        worldCreator = new B2WorldCreator(this, world, map);
-        world.setContactListener(new CollisionListener());
+        worldCreator = new B2World(this, map);
 
     }
 
@@ -126,7 +126,8 @@ public class PlayScreen implements Screen
         if(gameOver()) {
             GameOverScreen gameOverScreen = new GameOverScreen(game);
             gameOverScreen.setScore(hud.getScore());
-            game.setScreen(new GameOverScreen(game));
+            if (Highscore.getHighscore() < hud.getScore()) Highscore.setHighscore(hud.getScore());
+            game.setScreen(gameOverScreen);
             dispose();
         }
 
@@ -150,6 +151,8 @@ public class PlayScreen implements Screen
         return player;
     }
     public Hud getHud() { return hud; }
+    public World getWorld() { return world; }
+    public TiledMap getMap() { return map; }
     public void addCoin(Coin coin) {
         coins.add(coin);
     }

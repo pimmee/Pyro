@@ -150,10 +150,16 @@ public class Player extends Sprite
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(14 / PyroGame.PPM, 12 / PyroGame.PPM);
-
+        fdef.filter.categoryBits = PyroGame.PYRET_BIT;
+        fdef.filter.maskBits = PyroGame.GROUND_BIT |
+                PyroGame.BRICK_BIT |
+                PyroGame.COIN_BIT |
+                PyroGame.HEART_BIT |
+                PyroGame.MAGNET_BIT |
+                PyroGame.FLY_BIT;
         fdef.shape = shape;
 
-        body.createFixture(fdef).setUserData("pyret");
+        body.createFixture(fdef).setUserData(this);
     }
 
     public boolean outOfBounds() {
@@ -162,7 +168,7 @@ public class Player extends Sprite
 
     public void jump() {
         if  (currentState == State.STANDING || currentState == State.RUNNING)
-        body.applyLinearImpulse(new Vector2(0, JUMP_VEL), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(0, JUMP_VEL), body.getWorldCenter(), true);
         else if (currentState == State.FLYING || currentState == State.SWIMMING)
             body.applyLinearImpulse(new Vector2(0, FLY_VEL), body.getWorldCenter(), true);
     }

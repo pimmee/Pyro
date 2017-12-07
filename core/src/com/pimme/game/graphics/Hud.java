@@ -25,6 +25,7 @@ public class Hud {
 
     private static final int HP_WIDTH = 100;
     private static final int HP_HEIGHT = 10;
+    public static final float MAX_HEALTH = 100;
 
     private ShapeRenderer shapeRenderer;
 
@@ -95,10 +96,13 @@ public class Hud {
 
     public void addScore(int amount) {
         score += amount;
+        System.out.println(score);
     }
 
     public int getScore() { return score; }
-    public void addHealth(int amount) {
-        hp += amount;
+    public float getHealth() { return hp; }
+    public void addHealth(float amount) {
+        if (hp + amount > MAX_HEALTH) hp = MAX_HEALTH;
+        else hp += amount;
     }
 }
