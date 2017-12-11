@@ -1,6 +1,8 @@
 package com.pimme.game.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,7 +30,8 @@ public class Hud {
     public static final float MAX_HEALTH = 100;
 
     private ShapeRenderer shapeRenderer;
-
+    private float waterLevel = 0f;
+    private boolean tamponActive = false;
     private float hp = 100;
     private int score = 0;
     private Label scoreLabel;
@@ -59,6 +62,24 @@ public class Hud {
 
     public void render() {
         renderHealthBar();
+        drawWater();
+    }
+
+    private void drawWater() {
+        if (tamponActive && waterLevel > 0)
+            waterLevel -= 0.005f;
+        else
+            waterLevel += 0.003f;
+        //Draws water
+        if (screen.getPlayer().getY() <= waterLevel)
+            reduceHealth(0.2f);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setProjectionMatrix(screen.getGameCam().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(1, 0, 0, 0.5f);
+        shapeRenderer.rect(0, 0, 50, waterLevel);
+        shapeRenderer.end();
     }
 
     private void renderHealthBar() {
@@ -92,6 +113,10 @@ public class Hud {
     public void reduceHealth(float amount) {
         hp -= amount;
         if (hp <= 0) screen.getPlayer().currentState = Player.State.DEAD;
+    }
+
+    public void setTamponActive(boolean value) {
+        tamponActive = value;
     }
 
     public void addScore(int amount) {

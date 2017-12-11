@@ -1,0 +1,26 @@
+winter_ledges.png
+size: 384, 93
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+14
+  rotate: false
+  xy: 0, 0
+  size: 128, 93
+  orig: 128, 93
+  offset: 0, 0
+  index: -1
+15
+  rotate: false
+  xy: 128, 0
+  size: 128, 93
+  orig: 128, 93
+  offset: 0, 0
+  index: -1
+16
+  rotate: false
+  xy: 256, 0
+  size: 128, 93
+  orig: 128, 93
+  offset: 0, 0
+  index: -1

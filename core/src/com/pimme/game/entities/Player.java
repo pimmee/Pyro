@@ -151,12 +151,14 @@ public class Player extends Sprite
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(14 / PyroGame.PPM, 12 / PyroGame.PPM);
         fdef.filter.categoryBits = PyroGame.PYRET_BIT;
-        fdef.filter.maskBits = PyroGame.GROUND_BIT |
-                PyroGame.BRICK_BIT |
-                PyroGame.COIN_BIT |
-                PyroGame.HEART_BIT |
-                PyroGame.MAGNET_BIT |
-                PyroGame.FLY_BIT;
+        fdef.filter.maskBits = PyroGame.GROUND_BIT | // What can player collide with?
+                               PyroGame.BRICK_BIT |
+                               PyroGame.COIN_BIT |
+                               PyroGame.HP_BIT |
+                               PyroGame.SPIKE_BIT |
+                               PyroGame.TAMPON_BIT |
+                               PyroGame.BOUNCE_BIT;
+
         fdef.shape = shape;
 
         body.createFixture(fdef).setUserData(this);

@@ -1,0 +1,12 @@
+winter_test.png
+size: 540, 457
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Tile
+  rotate: false
+  xy: 0, 0
+  size: 540, 457
+  orig: 540, 457
+  offset: 0, 0
+  index: -1

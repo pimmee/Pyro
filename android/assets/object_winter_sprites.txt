@@ -1,0 +1,75 @@
+object_winter_sprites.png
+size: 984, 481
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Crate
+  rotate: false
+  xy: 0, 0
+  size: 101, 101
+  orig: 101, 101
+  offset: 0, 0
+  index: -1
+Crystal
+  rotate: false
+  xy: 101, 0
+  size: 97, 78
+  orig: 97, 78
+  offset: 0, 0
+  index: -1
+IceBox
+  rotate: false
+  xy: 198, 0
+  size: 101, 101
+  orig: 101, 101
+  offset: 0, 0
+  index: -1
+Igloo
+  rotate: false
+  xy: 299, 0
+  size: 511, 201
+  orig: 511, 201
+  offset: 0, 0
+  index: -1
+Sign
+  rotate: false
+  xy: 810, 0
+  size: 87, 94
+  orig: 87, 94
+  offset: 0, 0
+  index: 1
+Sign
+  rotate: false
+  xy: 897, 0
+  size: 87, 93
+  orig: 87, 93
+  offset: 0, 0
+  index: 2
+SnowMan
+  rotate: false
+  xy: 0, 201
+  size: 193, 210
+  orig: 193, 210
+  offset: 0, 0
+  index: -1
+Stone
+  rotate: false
+  xy: 193, 201
+  size: 124, 78
+  orig: 124, 78
+  offset: 0, 0
+  index: -1
+Tree
+  rotate: false
+  xy: 317, 201
+  size: 364, 280
+  orig: 364, 280
+  offset: 0, 0
+  index: 1
+Tree
+  rotate: false
+  xy: 681, 201
+  size: 228, 280
+  orig: 228, 280
+  offset: 0, 0
+  index: 2

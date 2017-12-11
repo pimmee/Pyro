@@ -1,4 +1,4 @@
-package com.pimme.game.entities;
+package com.pimme.game.entities.objects;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -26,7 +26,7 @@ public abstract class InteractiveObject
 		this.world = screen.getWorld();
 		this.map = screen.getMap();
 		this.bounds = ((RectangleMapObject) object).getRectangle();
-		tileSet = map.getTileSets().getTileSet("miscSprite");
+		tileSet = map.getTileSets().getTileSet("tile_sheet32");
 
 		BodyDef bdef = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
@@ -52,9 +52,10 @@ public abstract class InteractiveObject
 	}
 
 	public TiledMapTileLayer.Cell getCell() {
-		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
-		return layer.getCell((int)(body.getPosition().x * PyroGame.PPM / 32),
-				(int)(body.getPosition().y * PyroGame.PPM / 32));
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
+		float tileSize = layer.getTileWidth();
+		return layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize),
+				(int)(body.getPosition().y * PyroGame.PPM / tileSize));
 	}
 
 }

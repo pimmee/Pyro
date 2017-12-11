@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
-import com.pimme.game.entities.Coin;
+import com.pimme.game.entities.objects.Coin;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
 import com.pimme.game.tools.B2World;
@@ -27,7 +27,6 @@ import java.util.List;
 
 public class PlayScreen implements Screen
 {
-    private float WATER_HEIGHT = 0f;
     private PyroGame game;
     private OrthographicCamera gameCam;
     Texture texture;
@@ -58,14 +57,12 @@ public class PlayScreen implements Screen
 
         // FitViewPort to maintain virtual aspect ratios despite screen size
         viewPort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
-
-        System.out.println(Gdx.files.internal("level1test.tmx").file().getAbsolutePath());
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
         //map = mapLoader.load("level1.tmx");
         //map = mapLoader.load("bounce_map.tmx");
 	    //map = mapLoader.load("map1.tmx");
-        map = mapLoader.load("testing.tmx");
+        map = mapLoader.load("winter_map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
         gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
@@ -111,8 +108,7 @@ public class PlayScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render game map
         renderer.render();  // renders textures to bodies
-        //b2dr.render(world, gameCam.combined);
-        drawWater();
+        b2dr.render(world, gameCam.combined);
         hud.render();
 
 
@@ -133,19 +129,10 @@ public class PlayScreen implements Screen
 
     }
 
-    private void drawWater() {
-        //Draws water
-        WATER_HEIGHT += 0.001f;
-        if (player.getY() <= WATER_HEIGHT)
-            hud.reduceHealth(0.2f);
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.setProjectionMatrix(gameCam.combined);
-        shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(0, 0, 1, 0.5f);
-        shapeRenderer.rect(0, 0, 10, WATER_HEIGHT);
-        shapeRenderer.end();
+    public void setTampon(boolean value) {
+
     }
+
 
     public Player getPlayer() {
         return player;
@@ -153,6 +140,9 @@ public class PlayScreen implements Screen
     public Hud getHud() { return hud; }
     public World getWorld() { return world; }
     public TiledMap getMap() { return map; }
+    public OrthographicCamera getGameCam() {
+        return gameCam;
+    }
     public void addCoin(Coin coin) {
         coins.add(coin);
     }
