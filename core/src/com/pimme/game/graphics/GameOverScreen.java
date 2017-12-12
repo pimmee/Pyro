@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pimme.game.PyroGame;
+import com.pimme.game.PyroGame.Level;
 import com.badlogic.gdx.graphics.Color;
 import com.pimme.game.tools.Highscore;
 
@@ -70,7 +71,7 @@ public class GameOverScreen implements Screen {
     @Override
     public void render(float delta) {
         if(Gdx.input.justTouched()) {
-            game.setScreen(new PlayScreen(game));
+            game.setScreen(new PlayScreen(game, Level.MENS));
             dispose();
         }
         Gdx.gl.glClearColor(0,0,0,1);

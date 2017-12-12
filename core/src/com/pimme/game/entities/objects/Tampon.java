@@ -21,6 +21,7 @@ public class Tampon extends InteractiveObject
 
     @Override public void onCollision() {
 	screen.getHud().setTamponActive(true);
+	body.setUserData(null); // Sätter inte collision till null
 	Array<Cell> cells = getCells();
 	for (Cell cell : cells)
 	    	cell.setTile(null);
@@ -34,7 +35,7 @@ public class Tampon extends InteractiveObject
 	);
     }
     /**
-     * 	Texture takes up cells. This method returns all cells associated with the body
+     * 	Texture takes up 4 cells. This method returns all cells associated with the body
      */
     public Array<Cell> getCells() {
 	TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
@@ -48,7 +49,6 @@ public class Tampon extends InteractiveObject
 				(int)(body.getPosition().y * PyroGame.PPM / tileSize - 1)));
 	cells.add(layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize - 1),
 				(int)(body.getPosition().y * PyroGame.PPM / tileSize - 1)));
-	System.out.println(cells.size);
 	return cells;
     }
 }

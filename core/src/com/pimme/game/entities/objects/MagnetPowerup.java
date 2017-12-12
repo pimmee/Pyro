@@ -17,18 +17,18 @@ public class MagnetPowerup extends InteractiveObject
         getCell().setTile(tileSet.getTile(1000));
         //Array change as it is looping over it
         Array<Coin> toRemove = new Array();
-	for(Coin coin: screen.getCoins()) {
-	    float dx = coin.body.getPosition().x - playerX;
-	    float dy = coin.body.getPosition().y - playerY;
-	    if (dx * dx + dy * dy <= 50) {
-	        //screen.getHud().addScore(100);
-	        //toRemove.add(coin);
-            coin.moveTowards(screen.getPlayer());
-	    }
-	}
-	for(Coin coin: toRemove) {
-	    screen.removeCoin(coin);
-        coin.getCell().setTile(tileSet.getTile(10));
-    }
+//	for(Coin coin: screen.getCoins()) {
+//	    float dx = coin.body.getPosition().x - playerX;
+//	    float dy = coin.body.getPosition().y - playerY;
+//	    if (dx * dx + dy * dy <= 50) {
+//	        //screen.getHud().addScore(100);
+//	        //toRemove.add(coin);
+//            coin.moveTowards(screen.getPlayer());
+//	    }
+//	}
+//	for(Coin coin: toRemove) {
+//	    screen.removeCoin(coin);
+//        coin.getCell().setTile(tileSet.getTile(10));
+//    }
     }
 }

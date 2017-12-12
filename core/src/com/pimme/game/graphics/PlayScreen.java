@@ -19,6 +19,7 @@ import com.pimme.game.PyroGame;
 import com.pimme.game.entities.objects.Coin;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
+import com.pimme.game.PyroGame.Level;
 import com.pimme.game.tools.B2World;
 import com.pimme.game.tools.Highscore;
 
@@ -46,10 +47,11 @@ public class PlayScreen implements Screen
 
     private Player player;
     private Hud hud;
-    private List<Coin> coins = new ArrayList<Coin>();
+    private Level level;
 
-    public PlayScreen(PyroGame game) {
+    public PlayScreen(PyroGame game, Level level) {
         this.game = game;
+        this.level = level;
         texture = new Texture("badlogic.jpg");
         // cam to follow character
         gameCam = new OrthographicCamera();
@@ -60,9 +62,8 @@ public class PlayScreen implements Screen
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
         //map = mapLoader.load("level1.tmx");
-        //map = mapLoader.load("bounce_map.tmx");
-	    //map = mapLoader.load("map1.tmx");
-        map = mapLoader.load("winter_map.tmx");
+        //map = mapLoader.load("map1.tmx");
+        generateLevel();
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
         gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
@@ -129,8 +130,15 @@ public class PlayScreen implements Screen
 
     }
 
-    public void setTampon(boolean value) {
-
+    private void generateLevel() {
+        switch (level) {
+            case MENS:
+                map = mapLoader.load("winter_map.tmx");
+                break;
+            case BOUNCE:
+                map = mapLoader.load("bounce_map.tmx");
+                break;
+        }
     }
 
 
@@ -143,14 +151,7 @@ public class PlayScreen implements Screen
     public OrthographicCamera getGameCam() {
         return gameCam;
     }
-    public void addCoin(Coin coin) {
-        coins.add(coin);
-    }
 
-    public void removeCoin(Coin coin) {
-        coins.remove(coin);
-    }
-    public Iterable<Coin> getCoins() { return coins; }
     private boolean gameOver() {
         return(player.currentState == State.DEAD);
     }

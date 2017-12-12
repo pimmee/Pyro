@@ -3,6 +3,7 @@ package com.pimme.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.pimme.game.graphics.MenuScreen;
 import com.pimme.game.graphics.PlayScreen;
 
 public class PyroGame extends Game
@@ -22,11 +23,15 @@ public class PyroGame extends Game
     public static final short BOUNCE_BIT = 64;
     public static final short TAMPON_BIT = 128;
 
+    public enum Level {
+        MENS,
+        BOUNCE
+    }
 
     @Override
     public void create () {
 	batch = new SpriteBatch();
-	setScreen(new PlayScreen(this));
+	setScreen(new MenuScreen(this));
     }
 
     @Override
