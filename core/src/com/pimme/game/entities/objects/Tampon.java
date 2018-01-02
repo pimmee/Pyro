@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.Array;
 import com.pimme.game.PyroGame;
+import com.pimme.game.entities.Player;
 import com.pimme.game.graphics.PlayScreen;
 
 import java.util.Timer;
@@ -21,10 +22,8 @@ public class Tampon extends InteractiveObject
 
     @Override public void onCollision() {
 	screen.getHud().setTamponActive(true);
-	body.setUserData(null); // Sätter inte collision till null
-	Array<Cell> cells = getCells();
-	for (Cell cell : cells)
-	    	cell.setTile(null);
+	setCategoryFilter(PyroGame.NOTHING_BIT);
+	nullifyCells();
 	new Timer().schedule(
 		new TimerTask() {
 		    @Override
@@ -37,18 +36,16 @@ public class Tampon extends InteractiveObject
     /**
      * 	Texture takes up 4 cells. This method returns all cells associated with the body
      */
-    public Array<Cell> getCells() {
+    public void nullifyCells() {
 	TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
 	float tileSize = layer.getTileWidth();
-	Array<Cell> cells = new Array<Cell>();
-	cells.add(layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize),
-				(int)(body.getPosition().y * PyroGame.PPM / tileSize)));
-	cells.add(layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize -1),
-				(int)(body.getPosition().y * PyroGame.PPM / tileSize)));
-	cells.add(layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize),
-				(int)(body.getPosition().y * PyroGame.PPM / tileSize - 1)));
-	cells.add(layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize - 1),
-				(int)(body.getPosition().y * PyroGame.PPM / tileSize - 1)));
-	return cells;
+	layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize),
+				(int)(body.getPosition().y * PyroGame.PPM / tileSize)).setTile(null);
+	layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize -1),
+				(int)(body.getPosition().y * PyroGame.PPM / tileSize)).setTile(null);
+	layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize),
+				(int)(body.getPosition().y * PyroGame.PPM / tileSize - 1)).setTile(null);
+	layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize - 1),
+				(int)(body.getPosition().y * PyroGame.PPM / tileSize - 1)).setTile(null);
     }
 }

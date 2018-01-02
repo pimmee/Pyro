@@ -14,8 +14,6 @@ public class Spike extends InteractiveObject
     }
 
     @Override public void onCollision() {
-        while(isTouching) {
-	    screen.getHud().reduceHealth(1);
-	}
+        screen.getPlayer().setTouchingSpike(true);
     }
 }

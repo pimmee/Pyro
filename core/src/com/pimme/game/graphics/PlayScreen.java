@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -16,23 +13,18 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
-import com.pimme.game.entities.objects.Coin;
+import com.pimme.game.entities.Platform;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
 import com.pimme.game.PyroGame.Level;
 import com.pimme.game.tools.B2World;
 import com.pimme.game.tools.Highscore;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PlayScreen implements Screen
 {
     private PyroGame game;
     private OrthographicCamera gameCam;
-    Texture texture;
     private FitViewport viewPort;
-    private TextureAtlas atlas;
 
     // Tiled map variables
     private TmxMapLoader mapLoader;
@@ -49,10 +41,12 @@ public class PlayScreen implements Screen
     private Hud hud;
     private Level level;
 
+    private static final float FPS = 60;
+
     public PlayScreen(PyroGame game, Level level) {
         this.game = game;
         this.level = level;
-        texture = new Texture("badlogic.jpg");
+
         // cam to follow character
         gameCam = new OrthographicCamera();
         gameCam.zoom = 2f;
@@ -61,16 +55,15 @@ public class PlayScreen implements Screen
         viewPort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
-        //map = mapLoader.load("level1.tmx");
-        //map = mapLoader.load("map1.tmx");
         generateLevel();
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
-        gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
+        //gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
+        gameCam.position.x = PyroGame.V_WIDTH / PyroGame.PPM;
+        gameCam.position.y = PyroGame.V_HEIGHT / PyroGame.PPM;
 
         world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
-        atlas = new TextureAtlas("puppy_pack.atlas");
         player = new Player(world, this);
         hud = new Hud(this, game.batch);
 
@@ -78,26 +71,29 @@ public class PlayScreen implements Screen
 
     }
 
-    public TextureAtlas getAtlas() {
-        return atlas;
-    }
-    @Override public void show() {
-
-    }
+    @Override public void show() {}
 
     public void update(final float dt) {
-        world.step(1/ 60f, 6, 2);
+        world.step(1 / FPS, 6, 2);
         player.update(dt);
+        updatePlatforms();
         setCameraPos();
         gameCam.update();
         renderer.setView(gameCam);
     }
 
+    private void updatePlatforms() {
+        for (Platform platform : worldCreator.getPlatforms()) {
+            platform.update();
+        }
+    }
+
+
     private void setCameraPos() {
         if (player.body.getPosition().x > (PyroGame.V_WIDTH / PyroGame.PPM))
             gameCam.position.x = player.body.getPosition().x;
-        else gameCam.position.x = PyroGame.V_WIDTH / PyroGame.PPM;
-        gameCam.position.y = player.body.getPosition().y;
+        if (player.body.getPosition().y > (PyroGame.V_HEIGHT / PyroGame.PPM))
+            gameCam.position.y = player.body.getPosition().y;
     }
 
 
@@ -110,14 +106,16 @@ public class PlayScreen implements Screen
         //render game map
         renderer.render();  // renders textures to bodies
         b2dr.render(world, gameCam.combined);
-        hud.render();
 
 
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        for (Platform pLatform : worldCreator.getPlatforms())
+            pLatform.draw(game.batch);
         game.batch.end();
 
+        hud.render();
         hud.stage.draw();
 
         if(gameOver()) {
@@ -141,6 +139,10 @@ public class PlayScreen implements Screen
         }
     }
 
+    public void reachedGoal() {
+        game.setScreen(new GameOverScreen(game));
+    }
+
 
     public Player getPlayer() {
         return player;
@@ -150,6 +152,10 @@ public class PlayScreen implements Screen
     public TiledMap getMap() { return map; }
     public OrthographicCamera getGameCam() {
         return gameCam;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 
     private boolean gameOver() {
@@ -177,6 +183,6 @@ public class PlayScreen implements Screen
         renderer.dispose();
         world.dispose();
         b2dr.dispose();
-        //hud.dispose()
+        hud.dispose();
     }
 }

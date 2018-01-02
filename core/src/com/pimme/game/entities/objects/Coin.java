@@ -24,8 +24,8 @@ public class Coin extends InteractiveObject
     @Override
     public void onCollision() {
         screen.getHud().addScore(100);
-        //screen.removeCoin(this);
         getCell().setTile(null);
+        setCategoryFilter(PyroGame.NOTHING_BIT);
     }
 
     public void moveTowards(Player p) {

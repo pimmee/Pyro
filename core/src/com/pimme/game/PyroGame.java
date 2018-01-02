@@ -1,10 +1,8 @@
 package com.pimme.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pimme.game.graphics.MenuScreen;
-import com.pimme.game.graphics.PlayScreen;
 
 public class PyroGame extends Game
 {
@@ -16,12 +14,13 @@ public class PyroGame extends Game
     public static final short NOTHING_BIT = 0;
     public static final short GROUND_BIT = 1;
     public static final short PYRET_BIT = 2;
-    public static final short BRICK_BIT = 4;
+    public static final short FLY_BIT = 4;
     public static final short COIN_BIT = 8;
     public static final short HP_BIT = 16;
     public static final short SPIKE_BIT = 32;
     public static final short BOUNCE_BIT = 64;
     public static final short TAMPON_BIT = 128;
+    public static final short GOAL_BIT = 256;
 
     public enum Level {
         MENS,

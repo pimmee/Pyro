@@ -38,7 +38,6 @@ public class Brick
         fixture = body.createFixture(fdef);
 
         fixture.setUserData(this);
-        setCategoryFilter(PyroGame.BRICK_BIT);
     }
 
     public void setCategoryFilter(short filterBit) {

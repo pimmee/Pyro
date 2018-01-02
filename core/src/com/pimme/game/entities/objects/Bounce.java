@@ -18,7 +18,6 @@ public class Bounce extends InteractiveObject
 
     @Override
     public void onCollision() {
-        System.out.println("bounce on collide");
         screen.getPlayer().bounce();
     }
 }
