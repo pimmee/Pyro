@@ -18,6 +18,7 @@ public class Bounce extends InteractiveObject
 
     @Override
     public void onCollision() {
-        screen.getPlayer().bounce();
+        if (screen.getPlayer().body.getLinearVelocity().y < 0)
+            screen.getPlayer().bounce();
     }
 }

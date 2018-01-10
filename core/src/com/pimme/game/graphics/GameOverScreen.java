@@ -15,7 +15,7 @@ import com.pimme.game.PyroGame.Level;
 import com.badlogic.gdx.graphics.Color;
 import com.pimme.game.tools.Highscore;
 
-
+//LÄGG TILL TABLES FÖR 1-5 highscores
 /**
  * Created by smurf on 2017-11-16.
  */
@@ -32,6 +32,7 @@ public class GameOverScreen implements Screen {
 
 
         Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.CHARTREUSE);
+
         Table table = new Table();
         table.center();
         table.setFillParent(true);
@@ -51,7 +52,7 @@ public class GameOverScreen implements Screen {
         Label gameOverLabel = new Label("GAME OVER", font);
         Label playAgainLabel = new Label("CLICK TO PLAY AGAIN", font);
         Label scoreLabel = new Label("SCORE: " + score, font);
-        Label highScoreLabel = new Label("HIGHSCORE: " + Highscore.getHighscore(), font);
+        Label highScoreLabel = new Label("HIGHSCORE: " + Highscore.getHighScore(1), font);
 
         table.add(gameOverLabel).expandX().row();
         table.add(playAgainLabel).expandX().row();

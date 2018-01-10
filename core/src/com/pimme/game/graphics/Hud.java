@@ -63,7 +63,7 @@ public class Hud {
     public void render() {
         renderHealthBar();
         renderScore();
-        //drawWater();
+        drawWater();
     }
 
     private void renderScore() {
@@ -126,7 +126,6 @@ public class Hud {
 
     public void addScore(int amount) {
         score += amount;
-        System.out.println(score);
     }
 
     public int getScore() { return score; }

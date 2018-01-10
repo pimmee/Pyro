@@ -121,7 +121,7 @@ public class PlayScreen implements Screen
         if(gameOver()) {
             GameOverScreen gameOverScreen = new GameOverScreen(game);
             gameOverScreen.setScore(hud.getScore());
-            if (Highscore.getHighscore() < hud.getScore()) Highscore.setHighscore(hud.getScore());
+            if (Highscore.getHighScore(5) < hud.getScore()) Highscore.setHighScore(hud.getScore());
             game.setScreen(gameOverScreen);
             dispose();
         }
