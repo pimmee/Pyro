@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -31,7 +32,7 @@ public class GameOverScreen implements Screen {
         stage = new Stage(viewPort, game.batch);
 
 
-        Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.CHARTREUSE);
+        LabelStyle font = new LabelStyle(new BitmapFont(), Color.CHARTREUSE);
 
         Table table = new Table();
         table.center();
@@ -56,7 +57,7 @@ public class GameOverScreen implements Screen {
 
         table.add(gameOverLabel).expandX().row();
         table.add(playAgainLabel).expandX().row();
-        table.add(highScoreLabel).expandX().padTop(10f);
+        table.add(highScoreLabel).expandX().padTop(10.0f);
 
         stage.addActor(table);
     }

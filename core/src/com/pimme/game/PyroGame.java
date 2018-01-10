@@ -34,11 +34,6 @@ public class PyroGame extends Game
     }
 
     @Override
-    public void render () {
-	super.render();
-    }
-
-    @Override
     public void dispose () {
 	super.dispose();
 	batch.dispose();

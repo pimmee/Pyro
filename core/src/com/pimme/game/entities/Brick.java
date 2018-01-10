@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.pimme.game.PyroGame;
 import com.pimme.game.graphics.PlayScreen;
 
@@ -28,7 +29,7 @@ public class Brick
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        bdef.type = BodyDef.BodyType.StaticBody;
+        bdef.type = BodyType.StaticBody;
         bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
 
         body = world.createBody(bdef);

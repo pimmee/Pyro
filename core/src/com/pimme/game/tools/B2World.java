@@ -3,16 +3,15 @@ package com.pimme.game.tools;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.pimme.game.PyroGame;
 import com.pimme.game.entities.Brick;
 import com.pimme.game.entities.Platform;
 import com.pimme.game.entities.objects.*;
-import com.pimme.game.entities.objects.Tampon;
 import com.pimme.game.graphics.PlayScreen;
 
+@SuppressWarnings("ResultOfObjectAllocationIgnored")
 public class B2World implements ContactListener
 {
     private World world;

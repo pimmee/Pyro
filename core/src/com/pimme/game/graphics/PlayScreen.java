@@ -49,13 +49,13 @@ public class PlayScreen implements Screen
 
         // cam to follow character
         gameCam = new OrthographicCamera();
-        gameCam.zoom = 2f;
+        gameCam.zoom = 2.0f;
 
         // FitViewPort to maintain virtual aspect ratios despite screen size
         viewPort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
-        generateLevel();
+        generateMap();
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
         shapeRenderer = new ShapeRenderer();
         //gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
@@ -128,7 +128,7 @@ public class PlayScreen implements Screen
 
     }
 
-    private void generateLevel() {
+    private void generateMap() {
         switch (level) {
             case MENS:
                 map = mapLoader.load("winter_map.tmx");

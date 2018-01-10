@@ -6,7 +6,6 @@ import com.pimme.game.graphics.PlayScreen;
 
 public class Spike extends InteractiveObject
 {
-    public boolean isTouching = false;
     public Spike(final PlayScreen screen, final MapObject object) {
 	super(screen, object);
 	fixture.setUserData(this);

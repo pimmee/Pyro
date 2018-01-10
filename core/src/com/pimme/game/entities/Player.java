@@ -1,15 +1,14 @@
 package com.pimme.game.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 import com.pimme.game.PyroGame;
 import com.pimme.game.graphics.PlayScreen;
@@ -19,7 +18,7 @@ public class Player extends Sprite
     static final int SPRITE_SIZE = 20;
     private static final float SPEED = 7;
     private static final float JUMP_VEL = 4.4f;
-    private static final float FLY_VEL = 2f;
+    private static final float FLY_VEL = 2.0f;
     private Vector2 spawnPos = new Vector2();
 
     public enum State { FALLING, JUMPING, STANDING, RUNNING, FLYING, SWIMMING, DEAD}
@@ -120,13 +119,13 @@ public class Player extends Sprite
     }
 
     public void handleInput(final float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+        if (Gdx.input.isKeyJustPressed(Keys.UP))
             jump();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && body.getLinearVelocity().x <= 2)
+        if(Gdx.input.isKeyPressed(Keys.RIGHT) && body.getLinearVelocity().x <= 2)
             moveRight(dt);
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && body.getLinearVelocity().x >= -2)
+        if(Gdx.input.isKeyPressed(Keys.LEFT) && body.getLinearVelocity().x >= -2)
             moveLeft(dt);
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
+        if(Gdx.input.isKeyPressed(Keys.DOWN))
             moveDown(dt);
     }
 
@@ -186,7 +185,7 @@ public class Player extends Sprite
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(spawnPos.x / PyroGame.PPM, spawnPos.y / PyroGame.PPM);
-        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.type = BodyType.DynamicBody;
         body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();

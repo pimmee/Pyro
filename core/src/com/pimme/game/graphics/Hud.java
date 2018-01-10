@@ -7,13 +7,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pimme.game.PyroGame;
-import com.pimme.game.entities.Player;
+import com.pimme.game.entities.Player.State;
 
 
 /**
@@ -30,7 +32,7 @@ public class Hud {
     public static final float MAX_HEALTH = 100;
 
     private ShapeRenderer shapeRenderer;
-    private float waterLevel = 0f;
+    private float waterLevel = 0.0f;
     private boolean tamponActive = false;
     private float hp = 100;
     private int score = 0;
@@ -54,7 +56,7 @@ public class Hud {
         //make the table fill the entire stage
         table.setFillParent(true);
 
-        scoreLabel = new Label("SCORE: " + Integer.toString(score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        scoreLabel = new Label("SCORE: " + Integer.toString(score), new LabelStyle(new BitmapFont(), Color.WHITE));
         table.padLeft(PyroGame.V_WIDTH - 100);
         table.add(scoreLabel);
         stage.addActor(table);
@@ -81,14 +83,14 @@ public class Hud {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.setProjectionMatrix(screen.getGameCam().combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(1, 0, 0, 0.5f);
         shapeRenderer.rect(0, 0, 50, waterLevel);
         shapeRenderer.end();
     }
 
     private void renderHealthBar() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setProjectionMatrix(viewPort.getCamera().combined);
         shapeRenderer.setColor(Color.RED);
         roundedRect((PyroGame.V_WIDTH >> 1) - (HP_WIDTH >> 1), 0, HP_WIDTH, HP_HEIGHT, 3);
@@ -109,15 +111,15 @@ public class Hud {
         shapeRenderer.rect(x, y + radius, radius, height - 2*radius);
 
         // Four arches, clockwise too
-        shapeRenderer.arc(x + radius, y + radius, radius, 180f, 90f);
-        shapeRenderer.arc(x + width - radius, y + radius, radius, 270f, 90f);
-        shapeRenderer.arc(x + width - radius, y + height - radius, radius, 0f, 90f);
-        shapeRenderer.arc(x + radius, y + height - radius, radius, 90f, 90f);
+        shapeRenderer.arc(x + radius, y + radius, radius, 180.0f, 90.0f);
+        shapeRenderer.arc(x + width - radius, y + radius, radius, 270.0f, 90.0f);
+        shapeRenderer.arc(x + width - radius, y + height - radius, radius, 0.0f, 90.0f);
+        shapeRenderer.arc(x + radius, y + height - radius, radius, 90.0f, 90.0f);
     }
 
     public void reduceHealth(float amount) {
         hp -= amount;
-        if (hp <= 0) screen.getPlayer().currentState = Player.State.DEAD;
+        if (hp <= 0) screen.getPlayer().currentState = State.DEAD;
     }
 
     public void setTamponActive(boolean value) {

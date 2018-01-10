@@ -4,11 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Comparator;
-
-public class Highscore
+public final class Highscore
 {
     private static Preferences prefs;
+
+    private Highscore() {}
+
     public static void load() {
 
         prefs = Gdx.app.getPreferences("PyroGame");

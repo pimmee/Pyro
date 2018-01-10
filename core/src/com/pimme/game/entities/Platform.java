@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -53,7 +54,7 @@ public class Platform extends Sprite
 	FixtureDef fdef = new FixtureDef();
 	PolygonShape shape = new PolygonShape();
 
-	bdef.type = BodyDef.BodyType.KinematicBody;
+	bdef.type = BodyType.KinematicBody;
 	bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
 
 	body = world.createBody(bdef);

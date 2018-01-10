@@ -2,11 +2,7 @@ package com.pimme.game.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
 import com.pimme.game.PyroGame.Level;
@@ -84,11 +79,11 @@ public class MenuScreen implements Screen
         mensLevel = new TextButton("MENS CHAOS", skin);
         bounceLevel = new TextButton("BOUNCY", skin);
 
-        playButton.getLabel().setFontScale(3f, 3f);
-        exitButton.getLabel().setFontScale(3f, 3f);
-        backButton.getLabel().setFontScale(3f, 3f);
-        mensLevel.getLabel().setFontScale(3f,3f);
-        bounceLevel.getLabel().setFontScale(3f, 3f);
+        playButton.getLabel().setFontScale(3.0f, 3.0f);
+        exitButton.getLabel().setFontScale(3.0f, 3.0f);
+        backButton.getLabel().setFontScale(3.0f, 3.0f);
+        mensLevel.getLabel().setFontScale(3.0f, 3.0f);
+        bounceLevel.getLabel().setFontScale(3.0f, 3.0f);
 
 
         playButton.addListener(new ChangeListener()

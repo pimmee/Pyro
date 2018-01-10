@@ -2,15 +2,11 @@ package com.pimme.game.entities.objects;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.utils.Array;
 import com.pimme.game.PyroGame;
-import com.pimme.game.entities.Player;
 import com.pimme.game.graphics.PlayScreen;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 public class Tampon extends InteractiveObject
 {
