@@ -13,12 +13,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
+import com.pimme.game.entities.enemies.Enemy;
 import com.pimme.game.entities.Platform;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
 import com.pimme.game.PyroGame.Level;
 import com.pimme.game.tools.B2World;
-import com.pimme.game.tools.Highscore;
 
 public class PlayScreen implements Screen
 {
@@ -41,9 +41,9 @@ public class PlayScreen implements Screen
     private Hud hud;
     private Level level;
 
-    private static final float FPS = 60;
+    private Vector2 spawnPos;
 
-    public PlayScreen(PyroGame game, Level level) {
+    public PlayScreen(PyroGame game) {
         this.game = game;
         this.level = level;
 
@@ -62,30 +62,47 @@ public class PlayScreen implements Screen
         gameCam.position.x = PyroGame.V_WIDTH / PyroGame.PPM;
         gameCam.position.y = PyroGame.V_HEIGHT / PyroGame.PPM;
 
-        world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
+        if (PyroGame.getCurrentLevel() == Level.FLY || PyroGame.getCurrentLevel() == Level.SWIM)
+            world = new World(new Vector2(0, 0), true); // 1 parameter gravity, 2 sleep objects at rest
+        else world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
-        player = new Player(world, this);
+        worldCreator = new B2World(this, map);
+        player = new Player(this);
         hud = new Hud(this, game.batch);
 
-        worldCreator = new B2World(this, map);
 
     }
 
     @Override public void show() {}
 
     public void update(final float dt) {
-        world.step(1 / FPS, 6, 2);
+        world.step(1 / PyroGame.FPS, 6, 2);
+        hud.update(dt);
+        updatePlatforms(dt);
+        updateEnemies(dt);
         player.update(dt);
-        updatePlatforms();
         setCameraPos();
         gameCam.update();
         renderer.setView(gameCam);
     }
 
-    private void updatePlatforms() {
+    private void updatePlatforms(final float dt) {
         for (Platform platform : worldCreator.getPlatforms()) {
             platform.update();
         }
+    }
+
+    private void updateEnemies(final float dt) {
+        for (Enemy enemy : worldCreator.getEnemies())
+            enemy.update(dt);
+    }
+
+    public void setSpawnPosition(Vector2 position) {
+        spawnPos = position;
+    }
+
+    public Vector2 getSpawnPos() {
+        return spawnPos;
     }
 
 
@@ -111,38 +128,42 @@ public class PlayScreen implements Screen
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        for (Platform pLatform : worldCreator.getPlatforms())
-            pLatform.draw(game.batch);
+        for (Platform platform : worldCreator.getPlatforms())
+            platform.draw(game.batch);
+        for (Enemy enemy : worldCreator.getEnemies())
+            enemy.draw(game.batch);
         game.batch.end();
 
         hud.render();
         hud.stage.draw();
 
         if(gameOver()) {
-            GameOverScreen gameOverScreen = new GameOverScreen(game);
-            gameOverScreen.setScore(hud.getScore());
-            if (Highscore.getHighScore(5) < hud.getScore()) Highscore.setHighScore(hud.getScore());
-            game.setScreen(gameOverScreen);
+            game.setScreen(new GameOverScreen(game, hud.getScore()));
             dispose();
         }
 
     }
 
     private void generateMap() {
-        switch (level) {
+        switch (PyroGame.getCurrentLevel()) {
             case MENS:
                 map = mapLoader.load("winter_map.tmx");
                 break;
             case BOUNCE:
                 map = mapLoader.load("bounce_map.tmx");
                 break;
+            case FLY:
+                map = mapLoader.load("fly_map.tmx");
+                break;
+            case SWIM:
+                map = mapLoader.load("swim_map.tmx");
+                break;
         }
     }
 
-    public void reachedGoal() {
-        game.setScreen(new GameOverScreen(game));
+    public PyroGame getGame() {
+        return game;
     }
-
 
     public Player getPlayer() {
         return player;
@@ -175,7 +196,6 @@ public class PlayScreen implements Screen
     }
 
     @Override public void hide() {
-
     }
 
     @Override public void dispose() {

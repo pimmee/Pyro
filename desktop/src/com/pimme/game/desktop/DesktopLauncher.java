@@ -8,8 +8,8 @@ import com.pimme.game.PyroGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1200;
-		config.height = 600;
+		config.width = 1500;
+		config.height = 950;
 		new LwjglApplication(new PyroGame(), config);
 	}
 }

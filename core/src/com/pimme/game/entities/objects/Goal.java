@@ -2,7 +2,9 @@ package com.pimme.game.entities.objects;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.pimme.game.PyroGame;
+import com.pimme.game.graphics.FinishScreen;
 import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.tools.Highscore;
 
 public class Goal extends InteractiveObject
 {
@@ -13,6 +15,18 @@ public class Goal extends InteractiveObject
     }
 
     @Override public void onCollision() {
-
+	Highscore.load();
+	int score;
+	if (PyroGame.getCurrentLevel() == PyroGame.Level.BOUNCE) {
+	    score = screen.getHud().getTimeScore();
+	    if (Highscore.getHighScore(Highscore.MAX_SCORES - 1)== 0 || Highscore.getHighScore(Highscore.MAX_SCORES - 1) > score)
+		Highscore.setHighScore(score);
+	}
+	else {
+	    score = screen.getHud().getScore();
+	    if (Highscore.getHighScore(Highscore.MAX_SCORES - 1) < score) // Is score higher than lowest highscore?
+		Highscore.setHighScore(score);
+	}
+	screen.getGame().setScreen(new FinishScreen(screen.getGame(), score));
     }
 }

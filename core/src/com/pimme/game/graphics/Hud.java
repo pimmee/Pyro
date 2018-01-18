@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pimme.game.PyroGame;
+import com.pimme.game.PyroGame.Level;
 import com.pimme.game.entities.Player.State;
 
 
@@ -36,6 +37,8 @@ public class Hud {
     private boolean tamponActive = false;
     private float hp = 100;
     private int score = 0;
+    private float ticks = 0;
+    private float time = 0;
     private Label scoreLabel;
     private Label levelLabel;
 
@@ -62,10 +65,15 @@ public class Hud {
         stage.addActor(table);
     }
 
+    public void update(final float dt) {
+        time += dt;
+    }
+
     public void render() {
         renderHealthBar();
         renderScore();
-        drawWater();
+        if(PyroGame.getCurrentLevel() == Level.MENS)
+            drawWater();
     }
 
     private void renderScore() {
@@ -130,6 +138,9 @@ public class Hud {
         score += amount;
     }
 
+    public int getTimeScore() {
+        return (int) Math.floor(1/Math.sqrt(time) * 100);
+    }
     public int getScore() { return score; }
     public float getHealth() { return hp; }
     public void addHealth(float amount) {

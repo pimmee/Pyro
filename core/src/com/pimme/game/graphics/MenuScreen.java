@@ -3,17 +3,21 @@ package com.pimme.game.graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.pimme.game.PyroGame;
 import com.pimme.game.PyroGame.Level;
+import com.pimme.game.tools.Utils;
 
 public class MenuScreen implements Screen
 {
@@ -23,45 +27,31 @@ public class MenuScreen implements Screen
     private Table table;
     private Skin skin;
 
+    private Array<TextButton> buttons;
     private TextButton playButton;
     private TextButton exitButton;
     private TextButton backButton;
     private TextButton mensLevel;
     private TextButton bounceLevel;
+    private TextButton flyLevel;
+    private TextButton swimLevel;
 
+    //ÄNDRA FONT HOVER COLOR TILL font_joker_hover
     public MenuScreen(final PyroGame game) {
         this.game = game;
 
-        //viewPort = new FitViewport(PyroGame.V_WIDTH, PyroGame.V_HEIGHT, new OrthographicCamera());
-
-        stage = new Stage();
-        skin = new Skin();
+        viewPort = new FitViewport(PyroGame.V_WIDTH, PyroGame.V_HEIGHT, new OrthographicCamera());
+        stage = new Stage(viewPort, game.batch);
         Gdx.input.setInputProcessor(stage);
 
-        BitmapFont font = new BitmapFont(Gdx.files.internal("joker_font.fnt"));
-        skin.add("default", font); // stores the default font under "default"
-
-        TextButtonStyle tbs = new TextButtonStyle();
-//        tbs.up = skin.newDrawable("white", Color.DARK_GRAY);
-//        tbs.down = skin.newDrawable("white", Color.DARK_GRAY);
-//        tbs.checked = skin.newDrawable("white", Color.BLUE);
-//        tbs.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-        tbs.font = skin.getFont("default");
-        skin.add("default", tbs);
-
-
         table = new Table();
-        table.padTop(10);
         table.setFillParent(true);
         stage.addActor(table);
 
-
         initButtons();
         mainMenu();
-
-
-
     }
+
     @Override public void show() {
 
     }
@@ -69,55 +59,113 @@ public class MenuScreen implements Screen
     @Override public void render(final float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act();
         stage.draw();
     }
 
     private void initButtons() {
-        playButton = new TextButton("PLAY", skin);
-        exitButton = new TextButton("EXIT", skin);
-        backButton = new TextButton("BACK", skin);
-        mensLevel = new TextButton("MENS CHAOS", skin);
-        bounceLevel = new TextButton("BOUNCY", skin);
+        playButton = new TextButton("Play", Utils.skin);
+        exitButton = new TextButton("Exit", Utils.skin);
+        backButton = new TextButton("Back", Utils.skin);
+        mensLevel = new TextButton("Mens Knas", Utils.skin);
+        bounceLevel = new TextButton("Bouncy", Utils.skin);
+        flyLevel = new TextButton("Fly Away", Utils.skin);
+        swimLevel = new TextButton("Swim", Utils.skin);
 
-        playButton.getLabel().setFontScale(3.0f, 3.0f);
-        exitButton.getLabel().setFontScale(3.0f, 3.0f);
-        backButton.getLabel().setFontScale(3.0f, 3.0f);
-        mensLevel.getLabel().setFontScale(3.0f, 3.0f);
-        bounceLevel.getLabel().setFontScale(3.0f, 3.0f);
-
-
-        playButton.addListener(new ChangeListener()
+        playButton.addListener(new ClickListener()
         {
-            @Override public void changed(final ChangeEvent event, final Actor actor) {
+            @Override public void clicked(InputEvent event, float x, float y) {
                 selectLevel();
             }
+
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                playButton.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                playButton.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+            }
+
         });
-        exitButton.addListener(new ChangeListener()
+        exitButton.addListener(new ClickListener()
         {
-            @Override public void changed(final ChangeEvent event, final Actor actor) {
+            @Override public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                exitButton.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                exitButton.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+            }
         });
-        backButton.addListener(new ChangeListener()
+        backButton.addListener(new ClickListener()
         {
-            @Override public void changed(final ChangeEvent event, final Actor actor) {
+            @Override public void clicked(InputEvent event, float x, float y) {
                 mainMenu();
             }
-        });
-        mensLevel.addListener(new ChangeListener()
-        {
-            @Override public void changed(final ChangeEvent event, final Actor actor) {
-                game.setScreen(new PlayScreen(game, Level.MENS));
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                backButton.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                backButton.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
-        bounceLevel.addListener(new ChangeListener()
+        mensLevel.addListener(new ClickListener()
         {
-            @Override public void changed(final ChangeEvent event, final Actor actor) {
-                game.setScreen(new PlayScreen(game, Level.BOUNCE));
+            @Override public void clicked(InputEvent event, float x, float y) {
+                PyroGame.setCurrentLevel(Level.MENS);
+                game.setScreen(new PlayScreen(game));
+                dispose();
+            }
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                mensLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                mensLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
-
-
+        bounceLevel.addListener(new ClickListener()
+        {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                PyroGame.setCurrentLevel(Level.BOUNCE);
+                game.setScreen(new PlayScreen(game));
+                dispose();
+            }
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                bounceLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                bounceLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+            }
+        });
+        flyLevel.addListener(new ClickListener()
+        {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                PyroGame.setCurrentLevel(Level.FLY);
+                game.setScreen(new PlayScreen(game));
+                dispose();
+            }
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                flyLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                flyLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+            }
+        });
+        swimLevel.addListener(new ClickListener()
+        {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                PyroGame.setCurrentLevel(Level.SWIM);
+                game.setScreen(new PlayScreen(game));
+                dispose();
+            }
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                swimLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                swimLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+            }
+        });
 
     }
 
@@ -131,11 +179,13 @@ public class MenuScreen implements Screen
         table.clear();
         table.add(mensLevel).row();
         table.add(bounceLevel).row();
+        table.add(flyLevel).row();
+        table.add(swimLevel).row();
         table.add(backButton).row();
     }
 
     @Override public void resize(final int width, final int height) {
-        stage.getViewport().update(width, height, true);
+        viewPort.update(width, height, true);
     }
 
     @Override public void pause() {
@@ -152,6 +202,5 @@ public class MenuScreen implements Screen
 
     @Override public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
 }

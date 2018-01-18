@@ -20,9 +20,10 @@ public class FlyPowerup extends InteractiveObject
     }
 
     @Override public void onCollision() {
+        player = screen.getPlayer();
         getCell().setTile(null);
         setCategoryFilter(PyroGame.NOTHING_BIT);
-        player.currentState = State.FLYING;
+        //player.currentState = State.FLYING;
         player.body.setGravityScale(0);
 	final float defaultSpriteWidth = player.getWidth();
 	final float defaultSpriteHeight = player.getHeight();

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -23,30 +24,34 @@ public class Platform extends Sprite
 {
     private PlayScreen screen;
     private World world;
-    private TiledMap map;
     private Rectangle bounds;
     private Body body;
     private Fixture fixture;
 
-    private static final float MOVE_DISTANCE = 1.5f;
+    private float moveDistance;
+    private boolean horizontal;
     private static final float SPEED = 1;
     private float spawnX, spawnY;
     public Platform(PlayScreen screen, MapObject object) {
         super(new Texture(Gdx.files.internal("winter_ledges.png")));
 	this.screen = screen;
 	this.world = screen.getWorld();
-	this.map = screen.getMap();
 	this.bounds = ((RectangleMapObject) object).getRectangle();
-
+	MapProperties properties = object.getProperties();
+	moveDistance = properties.get("distance", Float.class);
+	horizontal = properties.get("horizontal", Boolean.class);
 	definePlatform();
     }
 
     public void update() {
 	setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-	if (body.getPosition().x > spawnX + MOVE_DISTANCE)
-	    body.setLinearVelocity(new Vector2(-SPEED, 0));
-	else if (body.getPosition().x < spawnX - MOVE_DISTANCE)
-	    body.setLinearVelocity(new Vector2(SPEED, 0));
+	if (horizontal) {
+	    if (body.getPosition().x > spawnX + moveDistance) body.setLinearVelocity(new Vector2(-SPEED, 0));
+	    else if (body.getPosition().x < spawnX - moveDistance) body.setLinearVelocity(new Vector2(SPEED, 0));
+	} else {
+	    if (body.getPosition().y > spawnY + moveDistance) body.setLinearVelocity(new Vector2(0, -SPEED));
+	    else if (body.getPosition().y < spawnY - moveDistance) body.setLinearVelocity(new Vector2(0, SPEED));
+	}
     }
 
     private void definePlatform() {
@@ -67,7 +72,8 @@ public class Platform extends Sprite
 
 	spawnX = body.getPosition().x;
 	spawnY = body.getPosition().y;
-	body.setLinearVelocity(new Vector2(-SPEED, 0));
+	if (horizontal)body.setLinearVelocity(new Vector2(SPEED, 0));
+	else body.setLinearVelocity(new Vector2(0, SPEED));
 	setSize(bounds.getWidth() / PyroGame.PPM, bounds.getHeight() / PyroGame.PPM);
 
     }
