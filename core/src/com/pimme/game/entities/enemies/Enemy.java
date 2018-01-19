@@ -1,5 +1,6 @@
 package com.pimme.game.entities.enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,7 +26,6 @@ public abstract class Enemy extends Sprite
     protected TiledMap map;
     protected Body body;
     protected Fixture fixture;
-    protected Vector2 velocity;
     protected Rectangle bounds;
 
     protected MapProperties properties;
@@ -36,11 +36,15 @@ public abstract class Enemy extends Sprite
 	this.screen = screen;
 	this.bounds = ((RectangleMapObject) object).getRectangle();
 	properties = object.getProperties();
+	setPosition((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
 	setSize(bounds.getWidth() / PyroGame.PPM, bounds.getHeight() / PyroGame.PPM);
+	//setSize(0, 0);
+
     }
 
     public abstract void defineEnemy();
     public abstract void update(final float dt);
+    public abstract void hitOnHead();
 
     public void setCategoryFilter(short filterBit) {
 	Filter filter = new Filter();

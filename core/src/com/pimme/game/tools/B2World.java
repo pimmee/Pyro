@@ -20,17 +20,24 @@ import com.pimme.game.graphics.PlayScreen;
 public class B2World implements ContactListener
 {
     private World world;
+    private TiledMap map;
     private PlayScreen screen;
     private Array<Platform> platforms;
     private Array<Enemy> enemies;
 
-    public B2World(PlayScreen screen, TiledMap map) {
+    public B2World(PlayScreen screen) {
 	this.screen = screen;
 	this.world = screen.getWorld();
-	platforms = new Array<Platform>();
-	enemies = new Array<Enemy>();
+	this.map = screen.getMap();
+	platforms = new Array<>();
+	enemies = new Array<>();
 
 	world.setContactListener(this);
+	initMapObjects();
+
+    }
+
+    private void initMapObjects() {
 	int layers = map.getLayers().getCount();
 	for (int layer = 2; layer < layers; layer++) {
 	    switch (layer) {
@@ -83,7 +90,7 @@ public class B2World implements ContactListener
 
     @Override
     public void beginContact(Contact contact) {
-        if (PyroGame.getCurrentLevel() == PyroGame.Level.FLY) screen.getGame().setScreen(new GameOverScreen(screen.getGame(), screen.getHud().getScore()));
+	if (PyroGame.getCurrentLevel() == PyroGame.Level.FLY) screen.getGame().setScreen(new GameOverScreen(screen.getGame(), screen.getHud().getScore()));
 	final Fixture fixA = contact.getFixtureA();
 	final Fixture fixB = contact.getFixtureB();
 
@@ -97,13 +104,17 @@ public class B2World implements ContactListener
 	    case PyroGame.PLAYER_BIT | PyroGame.FLY_BIT:
 	    case PyroGame.PLAYER_BIT | PyroGame.SPIKE_BIT:
 	    case PyroGame.PLAYER_BIT | PyroGame.GOAL_BIT:
-		if(fixA.getFilterData().categoryBits == PyroGame.PLAYER_BIT )
+		if(fixA.getFilterData().categoryBits == PyroGame.PLAYER_BIT)
 		    ((InteractiveObject) fixB.getUserData()).onCollision();
-		else
-		    ((InteractiveObject) fixA.getUserData()).onCollision();
+		else ((InteractiveObject) fixA.getUserData()).onCollision();
 		break;
 	    case PyroGame.PLAYER_BIT | PyroGame.ENEMY_BIT:
-		screen.getPlayer().currentState = State.DEAD;
+		//screen.getPlayer().currentState = State.DEAD;
+		break;
+	    case PyroGame.PLAYER_BIT | PyroGame.ENEMY_HEAD_BIT:
+	        if(fixA.getFilterData().categoryBits == PyroGame.PLAYER_BIT)
+	            ((Enemy) fixB.getUserData()).hitOnHead();
+	        else ((Enemy) fixA.getUserData()).hitOnHead();
 		break;
 		/*Gdx.app.postRunnable(new Runnable() {
 
@@ -132,8 +143,8 @@ public class B2World implements ContactListener
 	return platforms;
     }
     public Array<Enemy> getEnemies() {
-    	return enemies;
-        }
+	return enemies;
+    }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {

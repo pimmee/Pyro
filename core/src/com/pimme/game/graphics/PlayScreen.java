@@ -66,7 +66,7 @@ public class PlayScreen implements Screen
             world = new World(new Vector2(0, 0), true); // 1 parameter gravity, 2 sleep objects at rest
         else world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
-        worldCreator = new B2World(this, map);
+        worldCreator = new B2World(this);
         player = new Player(this);
         hud = new Hud(this, game.batch);
 
@@ -147,7 +147,7 @@ public class PlayScreen implements Screen
     private void generateMap() {
         switch (PyroGame.getCurrentLevel()) {
             case MENS:
-                map = mapLoader.load("winter_map.tmx");
+                map = mapLoader.load("platform_map.tmx");
                 break;
             case BOUNCE:
                 map = mapLoader.load("bounce_map.tmx");

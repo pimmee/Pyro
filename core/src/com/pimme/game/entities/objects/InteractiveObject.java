@@ -21,14 +21,16 @@ public abstract class InteractiveObject
     protected Body body;
     protected Fixture fixture;
     protected PlayScreen screen;
-    protected static TiledMapTileSet tileSet;
     protected InteractiveObject(PlayScreen screen, MapObject object) {
 	this.screen = screen;
 	this.world = screen.getWorld();
 	this.map = screen.getMap();
 	this.bounds = ((RectangleMapObject) object).getRectangle();
-	tileSet = map.getTileSets().getTileSet("tile_sheet32");
 
+	defineObject();
+    }
+
+    private void defineObject() {
 	BodyDef bdef = new BodyDef();
 	FixtureDef fdef = new FixtureDef();
 	PolygonShape shape = new PolygonShape();

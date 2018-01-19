@@ -16,6 +16,7 @@ import com.pimme.game.PyroGame.Level;
 import com.pimme.game.entities.objects.FlyPowerup;
 import com.pimme.game.graphics.GameOverScreen;
 import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.tools.Graphics;
 
 public class Player extends Sprite
 {
@@ -48,7 +49,6 @@ public class Player extends Sprite
     private boolean touchingSpike = false;
 
     public Player(PlayScreen screen) {
-        super(new Texture(Gdx.files.internal("puppy_pack.png")));
         this.world = screen.getWorld();
         this.screen = screen;
 
@@ -60,7 +60,6 @@ public class Player extends Sprite
         else currentState = State.STANDING;
 
         runningRight = true;
-        initAnimations();
         definePlayer();
     }
 
@@ -87,22 +86,22 @@ public class Player extends Sprite
         TextureRegion region;
         switch (currentState) {
             case JUMPING:
-                region = pyretJump.getKeyFrame(stateTimer);
+                region = Graphics.pyretJump.getKeyFrame(stateTimer);
                 break;
             case RUNNING:
-                region = pyretRun.getKeyFrame(stateTimer, true);
+                region = Graphics.pyretRun.getKeyFrame(stateTimer, true);
                 break;
             case FALLING:
-                region = pyretFalling.getKeyFrame(stateTimer, true);
+                region = Graphics.pyretFalling.getKeyFrame(stateTimer, true);
                 break;
             case FLYING:
-                region = pyretFlying.getKeyFrame(stateTimer, true);
+                region = Graphics.pyretFlying.getKeyFrame(stateTimer, true);
                 break;
             case SWIMMING:
-                region = pyretJump.getKeyFrame(stateTimer, true);
+                region = Graphics.pyretJump.getKeyFrame(stateTimer, true);
                 break;
             default:
-                region = pyretStanding.getKeyFrame(stateTimer, true);
+                region = Graphics.pyretStanding.getKeyFrame(stateTimer, true);
                 break;
         }
         if((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) { //If running to the left but faceing right
@@ -144,48 +143,6 @@ public class Player extends Sprite
             moveDown(dt);
     }
 
-    private void initAnimations() {
-        frames = new Array<TextureRegion>();
-        //RUNNING
-        frames.add(new TextureRegion(getTexture(), 62,  372, 257, 178));
-        frames.add(new TextureRegion(getTexture(), 358, 377, 254, 167));
-        frames.add(new TextureRegion(getTexture(), 666,  373, 260, 166));
-        frames.add(new TextureRegion(getTexture(), 952,  361, 259, 177));
-        frames.add(new TextureRegion(getTexture(), 1278,  371, 266, 158));
-        frames.add(new TextureRegion(getTexture(), 1589,  375, 254, 171));
-        pyretRun = new Animation<TextureRegion>(0.09f, frames);
-        //JUMPING
-        frames.clear();
-        frames.add(new TextureRegion(getTexture(), 84, 1597, 253, 167));
-        frames.add(new TextureRegion(getTexture(), 423, 1536, 249, 203));
-        frames.add(new TextureRegion(getTexture(), 751, 1430, 253, 209));
-        frames.add(new TextureRegion(getTexture(), 1086, 1384, 262, 193));
-        frames.add(new TextureRegion(getTexture(), 1426, 1358, 254, 171));
-        pyretJump = new Animation<TextureRegion>(0.15f, frames);
-
-        //FALLING
-        frames.clear();
-//        frames.add(new TextureRegion(getTexture(), 1781, 1375, 254, 172));
-        frames.add(new TextureRegion(getTexture(), 2126, 1482, 257, 196));
-//        frames.add(new TextureRegion(getTexture(), 2468, 1594, 253, 170));
-        pyretFalling = new Animation<TextureRegion>(0.2f, frames);
-        //STANDING
-        frames.clear();
-        frames.add(new TextureRegion(getTexture(), 58, 70, 257, 163));
-        frames.add(new TextureRegion(getTexture(), 367, 71, 257, 162));
-        frames.add(new TextureRegion(getTexture(), 677, 72, 257, 161));
-        frames.add(new TextureRegion(getTexture(), 991, 72, 257, 161));
-        pyretStanding = new Animation<TextureRegion>(0.7f, frames);
-
-        //FLYING
-        frames.clear();
-        frames.add(new TextureRegion(getTexture(), 78, 688, 481, 237));
-        frames.add(new TextureRegion(getTexture(), 627, 680, 501, 253));
-        frames.add(new TextureRegion(getTexture(), 1209, 681, 516, 251));
-        pyretFlying = new Animation<TextureRegion>(0.2f, frames);
-        frames.clear();
-    }
-
     private void initLevelSpecifics() {
         if (PyroGame.getCurrentLevel() == Level.FLY) {
             currentState = State.FLYING;
@@ -205,7 +162,7 @@ public class Player extends Sprite
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(14 / PyroGame.PPM, 12 / PyroGame.PPM);
         fdef.filter.categoryBits = PyroGame.PLAYER_BIT;
-        fdef.filter.maskBits = PyroGame.GROUND_BIT | // What can player collide with?
+        fdef.filter.maskBits = PyroGame.BRICK_BIT | // What can player collide with?
                                PyroGame.FLY_BIT |
                                PyroGame.COIN_BIT |
                                PyroGame.HP_BIT |
@@ -213,6 +170,7 @@ public class Player extends Sprite
                                PyroGame.TAMPON_BIT |
                                PyroGame.GOAL_BIT |
                                PyroGame.ENEMY_BIT |
+                               PyroGame.ENEMY_HEAD_BIT |
                                PyroGame.BOUNCE_BIT;
 
         fdef.shape = shape;

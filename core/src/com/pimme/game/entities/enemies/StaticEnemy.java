@@ -35,4 +35,8 @@ public class StaticEnemy extends Enemy
 	@Override public void update(final float dt) {
 
 	}
+
+    @Override public void hitOnHead() {
+
     }
+}

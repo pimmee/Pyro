@@ -3,6 +3,7 @@ package com.pimme.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pimme.game.graphics.MenuScreen;
+import com.pimme.game.tools.Graphics;
 import com.pimme.game.tools.Highscore;
 import com.pimme.game.tools.Utils;
 
@@ -13,17 +14,19 @@ public class PyroGame extends Game
     public static final int V_HEIGHT = 400;
     public static final float PPM = 100; // pixel per meter
     public static final float FPS = 60;
+
     public static final short NOTHING_BIT = 0;
-    public static final short GROUND_BIT = 1;
+    public static final short BRICK_BIT = 1;
     public static final short PLAYER_BIT = 2;
     public static final short FLY_BIT = 4;
     public static final short COIN_BIT = 8;
-    public static final short HP_BIT = 16;
+    public static final short HP_BIT = 1024;
     public static final short SPIKE_BIT = 32;
     public static final short BOUNCE_BIT = 64;
     public static final short TAMPON_BIT = 128;
     public static final short GOAL_BIT = 256;
     public static final short ENEMY_BIT = 512;
+    public static final short ENEMY_HEAD_BIT = 16;
 
     private static Level currentLevel;
 
@@ -37,6 +40,7 @@ public class PyroGame extends Game
     @Override
     public void create () {
 	batch = new SpriteBatch();
+        Graphics.init();
         Utils.load();
 //        Highscore.load();
 //        Highscore.reset();
