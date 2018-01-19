@@ -33,7 +33,8 @@ public class Hud {
     public static final float MAX_HEALTH = 100;
 
     private ShapeRenderer shapeRenderer;
-    private float waterLevel = 0.0f;
+    private float waterLevel = -0.7f;
+    private float waterSpeed = 0.005f;
     private boolean tamponActive = false;
     private float hp = 100;
     private int score = 0;
@@ -82,9 +83,9 @@ public class Hud {
 
     private void drawWater() {
         if (tamponActive && waterLevel > 0)
-            waterLevel -= 0.005f;
+            waterLevel -= waterSpeed;
         else
-            waterLevel += 0.003f;
+            waterLevel += waterSpeed;
         //Draws water
         if (screen.getPlayer().getY() <= waterLevel)
             reduceHealth(0.2f);
@@ -92,7 +93,7 @@ public class Hud {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.setProjectionMatrix(screen.getGameCam().combined);
         shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(1, 0, 0, 0.5f);
+        shapeRenderer.setColor(1, 0, 0, 0.3f);
         shapeRenderer.rect(0, 0, 50, waterLevel);
         shapeRenderer.end();
     }
@@ -126,7 +127,7 @@ public class Hud {
     }
 
     public void reduceHealth(float amount) {
-        hp -= amount;
+        if (hp > 0) hp -= amount;
         if (hp <= 0) screen.getPlayer().currentState = State.DEAD;
     }
 

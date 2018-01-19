@@ -42,6 +42,7 @@ public class PlayScreen implements Screen
     private Level level;
 
     private Vector2 spawnPos;
+    private boolean gameOver;
 
     public PlayScreen(PyroGame game) {
         this.game = game;
@@ -122,7 +123,7 @@ public class PlayScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render game map
         renderer.render();  // renders textures to bodies
-        b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, gameCam.combined);
 
 
         game.batch.setProjectionMatrix(gameCam.combined);
@@ -137,7 +138,7 @@ public class PlayScreen implements Screen
         hud.render();
         hud.stage.draw();
 
-        if(gameOver()) {
+        if(gameOver) {
             game.setScreen(new GameOverScreen(game, hud.getScore()));
             dispose();
         }
@@ -179,8 +180,8 @@ public class PlayScreen implements Screen
         return level;
     }
 
-    private boolean gameOver() {
-        return(player.currentState == State.DEAD);
+    public void setGameOver() {
+        gameOver = true;
     }
 
     @Override public void resize(final int width, final int height) {

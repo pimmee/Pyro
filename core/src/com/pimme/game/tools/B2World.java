@@ -9,10 +9,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.pimme.game.PyroGame;
 import com.pimme.game.entities.Brick;
+import com.pimme.game.entities.Player;
 import com.pimme.game.entities.enemies.Enemy;
 import com.pimme.game.entities.enemies.MovingEnemy;
 import com.pimme.game.entities.Platform;
-import com.pimme.game.entities.Player.State;
 import com.pimme.game.entities.objects.*;
 import com.pimme.game.graphics.GameOverScreen;
 import com.pimme.game.graphics.PlayScreen;
@@ -109,7 +109,7 @@ public class B2World implements ContactListener
 		else ((InteractiveObject) fixA.getUserData()).onCollision();
 		break;
 	    case PyroGame.PLAYER_BIT | PyroGame.ENEMY_BIT:
-		//screen.getPlayer().currentState = State.DEAD;
+		screen.getPlayer().hitByEnemy();
 		break;
 	    case PyroGame.PLAYER_BIT | PyroGame.ENEMY_HEAD_BIT:
 	        if(fixA.getFilterData().categoryBits == PyroGame.PLAYER_BIT)
