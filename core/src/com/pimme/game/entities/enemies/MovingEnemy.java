@@ -57,9 +57,9 @@ public class MovingEnemy extends Enemy
 			setRegion(getDeadTexture());
 			stateTime = 0;
 		} else if (!destroyed) {
+			checkDistance();
 			setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 			setRegion(getFrame(dt));
-			checkDistance();
 		}
 	}
 
@@ -78,12 +78,12 @@ public class MovingEnemy extends Enemy
 
 	private void checkDistance() {
 		if (horizontal) {
-			if (body.getPosition().x >= spawnX + moveDistance || body.getPosition().x <= spawnX - moveDistance) {
+			if (body.getPosition().x >= spawnX + moveDistance + velocity.x|| body.getPosition().x <= spawnX - moveDistance - velocity.x) {
 				body.setLinearVelocity(-body.getLinearVelocity().x, body.getLinearVelocity().y);
 				System.out.println("weird");
 			}
 		} else {
-			if (body.getPosition().y >= spawnY + moveDistance || body.getPosition().y <= spawnY - moveDistance) {
+			if (body.getPosition().y >= spawnY + moveDistance + velocity.y|| body.getPosition().y <= spawnY - moveDistance - velocity.y) {
 				body.setLinearVelocity(body.getLinearVelocity().x, -speed);
 			}
 		}
@@ -91,12 +91,12 @@ public class MovingEnemy extends Enemy
 
 	private TextureRegion getFrame(final float dt) {
 		TextureRegion region = animation.getKeyFrame(dt, true);
-		if ((body.getLinearVelocity().x < 0 || !movingRight)) {// && !region.isFlipX()) { //If running to the left but faceing right
-			region.flip(true, false);
-			movingRight = false;
-		} else if (body.getLinearVelocity().x > 0 || movingRight) {// && region.isFlipX()) {
+		if ((body.getLinearVelocity().x < 0 || !movingRight) && region.isFlipX()) { //If running to the left but faceing right
 			region.flip(true, false);
 			movingRight = true;
+		} else if ((body.getLinearVelocity().x > 0 || movingRight) && !region.isFlipX()) {
+			region.flip(true, false);
+			movingRight = false;
 		}
 		return region;
 	}
