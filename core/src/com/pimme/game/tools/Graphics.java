@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.utils.Array;
 
 public final class Graphics
@@ -22,15 +23,19 @@ public final class Graphics
 	public static Animation<TextureRegion> snailAnimation;
 
 	public static TextureRegion flyDead, fishDead, snailDead;
+    public static TextureRegion bounceTexture, idleBounceTexture;
 	//Sprites
 	public static Texture puppySprite;
 	public static Texture tilesSprite;
 	public static Texture enemiesSprite;
 	public static Texture platform;
 
+
 	public static void init() {
 		puppySprite = new Texture(Gdx.files.internal("puppy_pack.png"));
-		tilesSprite = new Texture(Gdx.files.internal("spritesheet_tiles32.png"));
+	    tilesSprite = new Texture(Gdx.files.internal("spritesheet_tiles32.png"));
+	    bounceTexture = new TextureRegion(tilesSprite, 32, 425, 32, 23);
+        idleBounceTexture = new TextureRegion(tilesSprite, 32, 463, 32, 17);
 		platform = new Texture(Gdx.files.internal("winter_ledges.png"));
 		enemiesSprite = new Texture(Gdx.files.internal("enemies_spritesheet.png"));
 		initPlayer();

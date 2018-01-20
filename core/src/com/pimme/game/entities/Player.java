@@ -63,6 +63,7 @@ public class Player extends Sprite {
     }
 
     public void update(final float dt) {
+        System.out.println(Gdx.graphics.getFramesPerSecond());
         if (currentState == State.DEAD) die();
         handleInput(dt);
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
