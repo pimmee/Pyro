@@ -22,13 +22,15 @@ public class Bounce extends InteractiveObject
         fixture.setUserData(this);
 	setCategoryFilter(PyroGame.BOUNCE_BIT);
 
-	defaultTile = map.getTileSets().getTileSet("spritesheet_tiles32").getTile(114);
-	bounceTile = map.getTileSets().getTileSet("spritesheet_tiles32").getTile(106);
+
+	defaultTile = map.getTileSets().getTileSet("tileset32_new").getTile(114);
+	bounceTile = map.getTileSets().getTileSet("tileset32_new").getTile(106);
     }
 
     @Override
     public void onCollision() {
         if (screen.getPlayer().body.getLinearVelocity().y < 0) {
+            System.out.println("coll");
             getCell().setTile(bounceTile);
             screen.getPlayer().bounce();
         new Timer().schedule(

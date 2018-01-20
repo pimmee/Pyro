@@ -15,50 +15,50 @@ import com.pimme.game.graphics.PlayScreen;
 
 public abstract class InteractiveObject
 {
-    protected World world;
-    protected TiledMap map;
-    protected Rectangle bounds;
-    protected Body body;
-    protected Fixture fixture;
-    protected PlayScreen screen;
-    protected InteractiveObject(PlayScreen screen, MapObject object) {
-	this.screen = screen;
-	this.world = screen.getWorld();
-	this.map = screen.getMap();
-	this.bounds = ((RectangleMapObject) object).getRectangle();
+	protected World world;
+	protected TiledMap map;
+	protected Rectangle bounds;
+	protected Body body;
+	protected Fixture fixture;
+	protected PlayScreen screen;
+	protected InteractiveObject(PlayScreen screen, MapObject object) {
+		this.screen = screen;
+		this.world = screen.getWorld();
+		this.map = screen.getMap();
+		this.bounds = ((RectangleMapObject) object).getRectangle();
 
-	defineObject();
-    }
+		defineObject();
+	}
 
-    private void defineObject() {
-	BodyDef bdef = new BodyDef();
-	FixtureDef fdef = new FixtureDef();
-	PolygonShape shape = new PolygonShape();
+	private void defineObject() {
+		BodyDef bdef = new BodyDef();
+		FixtureDef fdef = new FixtureDef();
+		PolygonShape shape = new PolygonShape();
 
-	bdef.type = BodyType.StaticBody;
-	bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
+		bdef.type = BodyType.StaticBody;
+		bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
 
-	body = world.createBody(bdef);
+		body = world.createBody(bdef);
 
-	shape.setAsBox(bounds.getWidth() / 2 / PyroGame.PPM, bounds.getHeight() / 2 / PyroGame.PPM); // start at x and goes all directions
-	fdef.shape = shape;
-	fdef.isSensor = true;
-	fixture = body.createFixture(fdef);
-    }
+		shape.setAsBox(bounds.getWidth() / 2 / PyroGame.PPM, bounds.getHeight() / 2 / PyroGame.PPM); // start at x and goes all directions
+		fdef.shape = shape;
+		fdef.isSensor = true;
+		fixture = body.createFixture(fdef);
+	}
 
-    public abstract void onCollision();
+	public abstract void onCollision();
 
-    public void setCategoryFilter(short filterBit) {
-	Filter filter = new Filter();
-	filter.categoryBits = filterBit;
-	fixture.setFilterData(filter);
-    }
+	public void setCategoryFilter(short filterBit) {
+		Filter filter = new Filter();
+		filter.categoryBits = filterBit;
+		fixture.setFilterData(filter);
+	}
 
-    public Cell getCell() {
-	TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
-	float tileSize = layer.getTileWidth();
-	return layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize),
-			     (int)(body.getPosition().y * PyroGame.PPM / tileSize));
-    }
+	public Cell getCell() {
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
+		float tileSize = layer.getTileWidth();
+		return layer.getCell((int)(body.getPosition().x * PyroGame.PPM / tileSize),
+				(int)(body.getPosition().y * PyroGame.PPM / tileSize));
+	}
 
 }

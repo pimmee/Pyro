@@ -24,11 +24,13 @@ public final class Graphics
 	public static TextureRegion flyDead, fishDead, snailDead;
 	//Sprites
 	public static Texture puppySprite;
+	public static Texture tilesSprite;
 	public static Texture enemiesSprite;
 	public static Texture platform;
 
 	public static void init() {
 		puppySprite = new Texture(Gdx.files.internal("puppy_pack.png"));
+		tilesSprite = new Texture(Gdx.files.internal("spritesheet_tiles32.png"));
 		platform = new Texture(Gdx.files.internal("winter_ledges.png"));
 		enemiesSprite = new Texture(Gdx.files.internal("enemies_spritesheet.png"));
 		initPlayer();

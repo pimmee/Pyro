@@ -236,7 +236,7 @@ public class Player extends Sprite {
                         count++;
                         if (Math.round(getColor().a) == 1) setAlpha(0.5f);
                         else setAlpha(1);
-                        if (count == 15) { // delay * 15 = 1.5sec
+                        if (count == 20) { // delay * 15 = 1.5sec
                             setAlpha(1);
                             damaged = false;
                             this.cancel();

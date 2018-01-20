@@ -27,6 +27,7 @@ public class MovingEnemy extends Enemy
 	private float speed;
 	private Vector2 velocity;
 	private Animation<TextureRegion> animation;
+	private TextureRegion region;
 	private float stateTime, angle;
 	private boolean setToDestroy, destroyed, movingRight;
 	public MovingEnemy(final PlayScreen screen, final MapObject object) {
@@ -35,7 +36,7 @@ public class MovingEnemy extends Enemy
 //	setCategoryFilter(PyroGame.ENEMY_BIT);
 		destroyed = false;
 		setToDestroy = false;
-		movingRight = false;
+		movingRight = true;
 		stateTime = 0;
 
 		// Get properties
@@ -43,7 +44,7 @@ public class MovingEnemy extends Enemy
 		horizontal = properties.get("horizontal", Boolean.class);
 		speed = properties.get("speed", Float.class);
 		type = properties.get("type", String.class);
-		body.setActive(false);
+		body.setActive(true);
 
 		setAnimation();
 		initVelocity();
@@ -59,8 +60,15 @@ public class MovingEnemy extends Enemy
 		} else if (!destroyed) {
 			checkDistance();
 			setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-			setRegion(getFrame(dt));
+			setRegion(getFrame());
 		}
+	}
+
+	private TextureRegion getFrame() {
+
+		region = animation.getKeyFrame(stateTime, true);
+		if((region.isFlipX() && !movingRight) || (!region.isFlipX() && movingRight)) region.flip(true, false);
+		return region;
 	}
 
 	private TextureRegion getDeadTexture() {
@@ -78,28 +86,38 @@ public class MovingEnemy extends Enemy
 
 	private void checkDistance() {
 		if (horizontal) {
-			if (body.getPosition().x >= spawnX + moveDistance + velocity.x|| body.getPosition().x <= spawnX - moveDistance - velocity.x) {
-				body.setLinearVelocity(-body.getLinearVelocity().x, body.getLinearVelocity().y);
-				System.out.println("weird");
+			if ((body.getPosition().x > (spawnX + moveDistance) && movingRight)) {
+				velocity.x = -speed;
+				movingRight = false;
+				body.setLinearVelocity(velocity);
 			}
-		} else {
-			if (body.getPosition().y >= spawnY + moveDistance + velocity.y|| body.getPosition().y <= spawnY - moveDistance - velocity.y) {
-				body.setLinearVelocity(body.getLinearVelocity().x, -speed);
+
+			else if (body.getPosition().x < (spawnX - moveDistance) && !movingRight) {
+				velocity.x = speed;
+				movingRight = true;
+				body.setLinearVelocity(velocity);
 			}
 		}
+		else {
+			if (body.getPosition().y > spawnY + moveDistance)
+				velocity.y = -speed;
+			if(body.getPosition().y < spawnY - moveDistance)
+				velocity.y = speed;
+		}
+		//body.applyLinearImpulse(velocity, body.getLocalCenter(), true);
 	}
 
-	private TextureRegion getFrame(final float dt) {
-		TextureRegion region = animation.getKeyFrame(dt, true);
-		if ((body.getLinearVelocity().x < 0 || !movingRight) && region.isFlipX()) { //If running to the left but faceing right
-			region.flip(true, false);
-			movingRight = true;
-		} else if ((body.getLinearVelocity().x > 0 || movingRight) && !region.isFlipX()) {
-			region.flip(true, false);
-			movingRight = false;
-		}
-		return region;
-	}
+//	private TextureRegion getFrame(final float dt) {
+//		TextureRegion region = animation.getKeyFrame(dt, true);
+//		if ((body.getLinearVelocity().x < 0 || !movingRight) && region.isFlipX()) { //If running to the left but faceing right
+//			region.flip(true, false);
+//			movingRight = true;
+//		} else if ((body.getLinearVelocity().x > 0 || movingRight) && !region.isFlipX()) {
+//			region.flip(true, false);
+//			movingRight = false;
+//		}
+//		return region;
+//	}
 
 	private void setAnimation() {
 		switch (type) {
