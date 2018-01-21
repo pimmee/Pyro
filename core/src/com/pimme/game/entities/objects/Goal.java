@@ -2,8 +2,8 @@ package com.pimme.game.entities.objects;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.pimme.game.PyroGame;
-import com.pimme.game.graphics.FinishScreen;
-import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.screens.FinishScreen;
+import com.pimme.game.screens.PlayScreen;
 import com.pimme.game.tools.Highscore;
 
 public class Goal extends InteractiveObject

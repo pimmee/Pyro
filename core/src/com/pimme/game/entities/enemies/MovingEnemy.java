@@ -1,7 +1,6 @@
 package com.pimme.game.entities.enemies;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,12 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.utils.Array;
 import com.pimme.game.PyroGame;
-import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.screens.PlayScreen;
 import com.pimme.game.tools.Graphics;
 
 public class MovingEnemy extends Enemy
@@ -25,18 +22,12 @@ public class MovingEnemy extends Enemy
 	private String type;
 	private float spawnX, spawnY;
 	private float speed;
-	private Vector2 velocity;
-	private Animation<TextureRegion> animation;
-	private TextureRegion region;
-	private float stateTime, angle;
-	private boolean setToDestroy, destroyed, movingRight;
+	private float stateTime;
+	private boolean setToDestroy, destroyed;
 	public MovingEnemy(final PlayScreen screen, final MapObject object) {
-		super(screen, object);//, new Texture(Gdx.files.internal("fishPink_swim.png")));
-		defineEnemy();
-//	setCategoryFilter(PyroGame.ENEMY_BIT);
+		super(screen, object);
 		destroyed = false;
 		setToDestroy = false;
-		movingRight = true;
 		stateTime = 0;
 
 		// Get properties
@@ -44,8 +35,9 @@ public class MovingEnemy extends Enemy
 		horizontal = properties.get("horizontal", Boolean.class);
 		speed = properties.get("speed", Float.class);
 		type = properties.get("type", String.class);
-		body.setActive(true);
 
+		defineEnemy();
+		body.setActive(false);
 		setAnimation();
 		initVelocity();
 	}
@@ -65,9 +57,9 @@ public class MovingEnemy extends Enemy
 	}
 
 	private TextureRegion getFrame() {
-
 		region = animation.getKeyFrame(stateTime, true);
-		if((region.isFlipX() && !movingRight) || (!region.isFlipX() && movingRight)) region.flip(true, false);
+		if((region.isFlipX() && velocity.x < 0) || (!region.isFlipX() && velocity.x > 0))
+			region.flip(true, false);
 		return region;
 	}
 
@@ -86,17 +78,10 @@ public class MovingEnemy extends Enemy
 
 	private void checkDistance() {
 		if (horizontal) {
-			if ((body.getPosition().x > (spawnX + moveDistance) && movingRight)) {
+			if ((body.getPosition().x > (spawnX + moveDistance) && velocity.x > 0))
 				velocity.x = -speed;
-				movingRight = false;
-				body.setLinearVelocity(velocity);
-			}
-
-			else if (body.getPosition().x < (spawnX - moveDistance) && !movingRight) {
+			else if (body.getPosition().x < (spawnX - moveDistance) && velocity.x < 0)
 				velocity.x = speed;
-				movingRight = true;
-				body.setLinearVelocity(velocity);
-			}
 		}
 		else {
 			if (body.getPosition().y > spawnY + moveDistance)
@@ -104,20 +89,9 @@ public class MovingEnemy extends Enemy
 			if(body.getPosition().y < spawnY - moveDistance)
 				velocity.y = speed;
 		}
-		//body.applyLinearImpulse(velocity, body.getLocalCenter(), true);
+		body.setLinearVelocity(velocity);
 	}
 
-//	private TextureRegion getFrame(final float dt) {
-//		TextureRegion region = animation.getKeyFrame(dt, true);
-//		if ((body.getLinearVelocity().x < 0 || !movingRight) && region.isFlipX()) { //If running to the left but faceing right
-//			region.flip(true, false);
-//			movingRight = true;
-//		} else if ((body.getLinearVelocity().x > 0 || movingRight) && !region.isFlipX()) {
-//			region.flip(true, false);
-//			movingRight = false;
-//		}
-//		return region;
-//	}
 
 	private void setAnimation() {
 		switch (type) {
@@ -143,36 +117,41 @@ public class MovingEnemy extends Enemy
 
 	@Override public void defineEnemy()  {
 		BodyDef bdef = new BodyDef();
-		bdef.type = BodyType.KinematicBody;
+		bdef.type = BodyType.DynamicBody;
 		bdef.position.set(getX(), getY());
 		FixtureDef fdef = new FixtureDef();
 		PolygonShape shape = new PolygonShape();
 
-
 		body = world.createBody(bdef);
+		body.setGravityScale(0);
 		spawnX = body.getPosition().x;
 		spawnY = body.getPosition().y;
 
 		shape.setAsBox(bounds.getWidth() / 2 / PyroGame.PPM, bounds.getHeight() / 2 / PyroGame.PPM); // start at x and goes all directions
 		fdef.filter.categoryBits = PyroGame.ENEMY_BIT;
+		fdef.filter.maskBits = PyroGame.BRICK_BIT |
+				PyroGame.PLAYER_BIT;
 
 
 		fdef.shape = shape;
 		body.createFixture(fdef).setUserData(this);
 
 		//Create the Head here:
-		PolygonShape head = new PolygonShape();
-		Vector2[] vertice = new Vector2[4];
-		vertice[0] = new Vector2(-15, 20).scl(1 / PyroGame.PPM);
-		vertice[1] = new Vector2(15, 20).scl(1 / PyroGame.PPM);
-		vertice[2] = new Vector2(-3, 3).scl(1 / PyroGame.PPM);
-		vertice[3] = new Vector2(3, 3).scl(1 / PyroGame.PPM);
-		head.set(vertice);
+		if (!type.equals("fish")) {
+			PolygonShape head = new PolygonShape();
+			Vector2[] vertice = new Vector2[4];
+			vertice[0] = new Vector2(-15, 20).scl(1 / PyroGame.PPM);
+			vertice[1] = new Vector2(15, 20).scl(1 / PyroGame.PPM);
+			vertice[2] = new Vector2(-3, 3).scl(1 / PyroGame.PPM);
+			vertice[3] = new Vector2(3, 3).scl(1 / PyroGame.PPM);
+			head.set(vertice);
 
-		fdef.shape = head;
-		fdef.restitution = 0.5f;
-		fdef.filter.categoryBits = PyroGame.ENEMY_HEAD_BIT;
-		body.createFixture(fdef).setUserData(this);
+			fdef.shape = head;
+			fdef.restitution = 0.5f;
+			fdef.filter.categoryBits = PyroGame.ENEMY_HEAD_BIT;
+
+			body.createFixture(fdef).setUserData(this);
+		}
 	}
 
 	public void draw(Batch batch) {
@@ -182,8 +161,7 @@ public class MovingEnemy extends Enemy
 
 	@Override public void hitOnHead() {
 		setToDestroy = true;
-		screen.getPlayer().body.setLinearVelocity(new Vector2(screen.getPlayer().body.getLinearVelocity().x,3.5f));
+		screen.getPlayer().body.setLinearVelocity(new Vector2(screen.getPlayer().body.getLinearVelocity().x, 3.5f));
+		PyroGame.manager.get("audio/sounds/enemyBounce.wav", Sound.class).play();
 	}
-
-
 }

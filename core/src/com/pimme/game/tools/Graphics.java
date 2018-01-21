@@ -16,6 +16,7 @@ public final class Graphics
 	public static Animation<TextureRegion> pyretStanding;
 	public static Animation<TextureRegion> pyretFlying;
 	public static Animation<TextureRegion> pyretHurt;
+	public static Animation<TextureRegion> pyretSwim;
 
 	//Enemies
 	public static Animation<TextureRegion> flyAnimation;
@@ -92,6 +93,15 @@ public final class Graphics
 		frames.add(new TextureRegion(puppySprite, 1271, 1147, 263, 119));
 		frames.add(new TextureRegion(puppySprite, 1582, 1148, 259, 118));
 		pyretHurt = new Animation<>(0.1f, frames);
+		frames.clear();
+
+		frames.add(new TextureRegion(puppySprite, 62,  372, 257, 178));
+		frames.add(new TextureRegion(puppySprite, 358, 377, 254, 167));
+		frames.add(new TextureRegion(puppySprite, 666,  373, 260, 166));
+		frames.add(new TextureRegion(puppySprite, 952,  361, 259, 177));
+		frames.add(new TextureRegion(puppySprite, 1278,  371, 266, 158));
+		frames.add(new TextureRegion(puppySprite, 1589,  375, 254, 171));
+		pyretSwim = new Animation<>(0.07f, frames);
 		frames.clear();
 
 	}

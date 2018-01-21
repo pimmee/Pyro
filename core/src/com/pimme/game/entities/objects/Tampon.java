@@ -3,7 +3,7 @@ package com.pimme.game.entities.objects;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.pimme.game.PyroGame;
-import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.screens.PlayScreen;
 
 import java.util.Timer;
 import java.util.TimerTask;

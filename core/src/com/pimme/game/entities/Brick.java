@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.pimme.game.PyroGame;
-import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.screens.PlayScreen;
 
 public class Brick
 {
@@ -25,6 +25,11 @@ public class Brick
         this.map = screen.getMap();
         this.bounds = ((RectangleMapObject) object).getRectangle();
 
+        defineBrick();
+        setCategoryFilter(PyroGame.BRICK_BIT);
+    }
+
+    private void defineBrick() {
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -40,6 +45,7 @@ public class Brick
 
         fixture.setUserData(this);
     }
+
 
     public void setCategoryFilter(short filterBit) {
         Filter filter = new Filter();

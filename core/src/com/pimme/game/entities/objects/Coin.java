@@ -1,10 +1,11 @@
 package com.pimme.game.entities.objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.pimme.game.PyroGame;
 import com.pimme.game.entities.*;
-import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.screens.PlayScreen;
 
 /**
  * Created by smurf on 2017-11-12.
@@ -25,6 +26,7 @@ public class Coin extends InteractiveObject
         screen.getHud().addScore(100);
         getCell().setTile(null);
         setCategoryFilter(PyroGame.NOTHING_BIT);
+        PyroGame.manager.get("audio/sounds/coin2.wav", Sound.class).play();
     }
 
     public void moveTowards(Player p) {

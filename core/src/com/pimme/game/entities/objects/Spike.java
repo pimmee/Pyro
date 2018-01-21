@@ -2,7 +2,7 @@ package com.pimme.game.entities.objects;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.pimme.game.PyroGame;
-import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.screens.PlayScreen;
 
 public class Spike extends InteractiveObject
 {
@@ -13,6 +13,8 @@ public class Spike extends InteractiveObject
     }
 
     @Override public void onCollision() {
+        if (!screen.getPlayer().isTouchingSpike())
+            screen.getHud().reduceHealth(5);
         screen.getPlayer().setTouchingSpike(true);
     }
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.pimme.game.PyroGame;
 import com.pimme.game.entities.Player;
 import com.pimme.game.entities.Player.State;
-import com.pimme.game.graphics.PlayScreen;
+import com.pimme.game.screens.PlayScreen;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,7 +15,7 @@ public class FlyPowerup extends InteractiveObject
     public FlyPowerup(PlayScreen screen, MapObject object) {
         super(screen, object);
         fixture.setUserData(this);
-        setCategoryFilter(PyroGame.FLY_BIT);
+//        setCategoryFilter(PyroGame.FLY_BIT);
         player = screen.getPlayer();
     }
 
