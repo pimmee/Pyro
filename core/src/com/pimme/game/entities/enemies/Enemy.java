@@ -19,38 +19,38 @@ import com.pimme.game.screens.PlayScreen;
 
 public abstract class Enemy extends Sprite
 {
-    protected World world;
-    protected PlayScreen screen;
-    protected TiledMap map;
-    public Body body;
-    protected Fixture fixture;
-    protected Rectangle bounds;
+	protected World world;
+	protected PlayScreen screen;
+	protected TiledMap map;
+	public Body body;
+	protected Fixture fixture;
+	protected Rectangle bounds;
 
 	protected Vector2 velocity;
 	protected Animation<TextureRegion> animation;
 	protected TextureRegion region;
 
-    protected MapProperties properties;
+	protected MapProperties properties;
 
-    public Enemy(PlayScreen screen, MapObject object) {
-	this.world = screen.getWorld();
-	this.map = screen.getMap();
-	this.screen = screen;
-	this.bounds = ((RectangleMapObject) object).getRectangle();
-	properties = object.getProperties();
-	setPosition((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
-	setSize(bounds.getWidth() / PyroGame.PPM, bounds.getHeight() / PyroGame.PPM);
-    }
+	public Enemy(PlayScreen screen, MapObject object) {
+		this.world = screen.getWorld();
+		this.map = screen.getMap();
+		this.screen = screen;
+		this.bounds = ((RectangleMapObject) object).getRectangle();
+		properties = object.getProperties();
+		setPosition((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
+		setSize(bounds.getWidth() / PyroGame.PPM, bounds.getHeight() / PyroGame.PPM);
+	}
 
-    public abstract void defineEnemy();
-    public abstract void update(final float dt);
-    public abstract void hitOnHead();
+	public abstract void defineEnemy();
+	public abstract void update(final float dt);
+	public abstract void hitOnHead();
 
-    public void setCategoryFilter(short filterBit) {
-	Filter filter = new Filter();
-	filter.categoryBits = filterBit;
-	fixture.setFilterData(filter);
-    }
+	public void setCategoryFilter(short filterBit) {
+		Filter filter = new Filter();
+		filter.categoryBits = filterBit;
+		fixture.setFilterData(filter);
+	}
 
 
 	public void reverseVelocity() {

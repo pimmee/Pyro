@@ -31,35 +31,27 @@ public class Hud {
 
     private static final int HP_WIDTH = 100;
     private static final int HP_HEIGHT = 10;
-    public static final float MAX_HEALTH = 100;
+    private static final float MAX_HEALTH = 100;
 
     private ShapeRenderer shapeRenderer;
     private float waterLevel = -0.7f;
     private float waterSpeed = 0.005f;
     private boolean tamponActive = false;
     private float hp = 100;
-    private float air = 100;
     private int score = 0;
-    private float ticks = 0;
     private float time = 0;
     private Label scoreLabel;
-    private Label levelLabel;
 
     public Hud(PlayScreen screen, SpriteBatch batch) {
         this.screen = screen;
 
-        //setup the HUD viewport using a new camera seperate from our gamecam
-        //define our stage using that viewport and our games spritebatch
         viewPort = new FitViewport(PyroGame.V_WIDTH, PyroGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewPort, batch);
 
         shapeRenderer = new ShapeRenderer();
 
-        //table to organize our hud's labels
         Table table = new Table();
-        //top align table
         table.top();
-        //make the table fill the entire stage
         table.setFillParent(true);
 
         scoreLabel = new Label("SCORE: " + Integer.toString(score), new LabelStyle(new BitmapFont(), Color.WHITE));
@@ -74,22 +66,14 @@ public class Hud {
 
     public void render() {
         renderHealthBar();
-        renderScore();
-        if(PyroGame.currentLevel == Level.MENS || PyroGame.currentLevel == Level.MENS2)
-            drawWater();
-        if (PyroGame.currentLevel == Level.SWIM) {
-            decreaseAir();
-            renderAirBar();
-        }
+        //renderScore();
+        drawWater();
     }
 
-    private void decreaseAir() {
-        if (air > 0) air -= 0.1;
-    }
 
-    private void renderScore() {
-        scoreLabel.setText("SCORE: " + Integer.toString(score));
-    }
+//    private void renderScore() {
+//        scoreLabel.setText("SCORE: " + Integer.toString(score));
+//    }
 
     private void drawWater() {
         if (tamponActive && waterLevel > 0)
@@ -119,19 +103,19 @@ public class Hud {
         }
         shapeRenderer.end();
     }
-    private void renderAirBar() {
-        shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setProjectionMatrix(viewPort.getCamera().combined);
-        shapeRenderer.setColor(Color.SKY);
-        roundedRect((PyroGame.V_WIDTH >> 1) - (HP_WIDTH >> 1), HP_HEIGHT, HP_WIDTH, HP_HEIGHT, 3);
-        if (air > 3) {
-            shapeRenderer.setColor(Color.BLUE);
-            roundedRect((PyroGame.V_WIDTH >> 1) - (HP_WIDTH >> 1), HP_HEIGHT, air, HP_HEIGHT, 3);
-        }
-        shapeRenderer.end();
-    }
+//    private void renderAirBar() {
+//        shapeRenderer.begin(ShapeType.Filled);
+//        shapeRenderer.setProjectionMatrix(viewPort.getCamera().combined);
+//        shapeRenderer.setColor(Color.SKY);
+//        roundedRect((PyroGame.V_WIDTH >> 1) - (HP_WIDTH >> 1), HP_HEIGHT, HP_WIDTH, HP_HEIGHT, 3);
+//        if (air > 3) {
+//            shapeRenderer.setColor(Color.BLUE);
+//            roundedRect((PyroGame.V_WIDTH >> 1) - (HP_WIDTH >> 1), HP_HEIGHT, air, HP_HEIGHT, 3);
+//        }
+//        shapeRenderer.end();
+//    }
 
-    public void roundedRect(float x, float y, float width, float height, float radius){
+    private void roundedRect(float x, float y, float width, float height, float radius){
         // Central rectangle
         shapeRenderer.rect(x + radius, y + radius, width - 2*radius, height - 2*radius);
 
@@ -162,9 +146,9 @@ public class Hud {
     }
 
     public int getTimeScore() {
-        return (int) Math.floor(1/Math.sqrt(time) * 100);
+        return (int) Math.floor(1/Math.sqrt(time) * 100 * hp);
     }
-    public int getScore() { return score; }
+    public int getScore() { return (int) (score/waterLevel); }
     public float getHealth() { return hp; }
     public void addHealth(float amount) {
         if (hp + amount > MAX_HEALTH) hp = MAX_HEALTH;

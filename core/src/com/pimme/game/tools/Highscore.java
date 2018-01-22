@@ -23,9 +23,15 @@ public final class Highscore
             if (!prefs.contains("HighScore3" + level)) prefs.putInteger("HighScore3" + level, 0);
             if (!prefs.contains("HighScore4" + level)) prefs.putInteger("HighScore4" + level, 0);
         }
+        if (!prefs.contains("HighScore1TOTAL")) prefs.putInteger("HighScore1TOTAL", 0);
+        if (!prefs.contains("HighScore2TOTAL")) prefs.putInteger("HighScore2TOTAL", 0);
+        if (!prefs.contains("HighScore3TOTAL")) prefs.putInteger("HighScore3TOTAL", 0);
+        if (!prefs.contains("HighScore4TOTAL")) prefs.putInteger("HighScore4TOTAL", 0);
+        if (!prefs.contains("HighScore5TOTAL")) prefs.putInteger("HighScore5TOTAL", 0);
     }
 
     public static void reset() {
+        prefs = Gdx.app.getPreferences("PyroGame");
         for (Level level : Level.values()) { // Creates prefs with key HighScore0MENS
             prefs.putInteger("HighScore0" + level, 0);
             prefs.putInteger("HighScore1" + level, 0);
@@ -33,6 +39,11 @@ public final class Highscore
             prefs.putInteger("HighScore3" + level, 0);
             prefs.putInteger("HighScore4" + level, 0);
         }
+        prefs.putInteger("HighScore0TOTAL", 0);
+        prefs.putInteger("HighScore1TOTAL", 0);
+        prefs.putInteger("HighScore2TOTAL", 0);
+        prefs.putInteger("HighScore3TOTAL", 0);
+        prefs.putInteger("HighScore4TOTAL", 0);
         prefs.flush();
     }
 
@@ -44,13 +55,20 @@ public final class Highscore
         highScores.sort();
         highScores.reverse(); // Highest score first in list
         highScores.removeIndex(highScores.size - 1);// Remove lowest score
-        for (int i = 0; i < highScores.size; i++)
-            prefs.putInteger("HighScore" + i + PyroGame.currentLevel, highScores.get(i)); // Writes scores in correct order
+        for (int i = 0; i < highScores.size; i++) {
+            if (PyroGame.completedLevels != null && PyroGame.completedLevels.size == 4)
+                prefs.putInteger("HighScore" + i + "TOTAL", highScores.get(i));
+            else
+                prefs.putInteger("HighScore" + i + PyroGame.currentLevel, highScores.get(i)); // Writes scores in correct order
+        }
         prefs.flush();
     }
 
     public static int getHighScore(int i) {
-        return prefs.getInteger("HighScore" + i + PyroGame.currentLevel);
+        if (PyroGame.completedLevels != null && PyroGame.completedLevels.size == 4)
+            return prefs.getInteger("HighScore" + i + "TOTAL");
+        else
+            return prefs.getInteger("HighScore" + i + PyroGame.currentLevel);
     }
 
 }

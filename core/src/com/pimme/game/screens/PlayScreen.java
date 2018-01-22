@@ -6,7 +6,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -31,7 +33,7 @@ public class PlayScreen implements Screen
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private ShapeRenderer shapeRenderer;
+//    private MapProperties mapProp;
 
     //Box2d variables
     private World world;
@@ -40,49 +42,48 @@ public class PlayScreen implements Screen
 
     private Player player;
     private Hud hud;
-    private Level level;
-    private Music music;
 
     private Vector2 spawnPos;
     private boolean gameOver;
 
+//    private int mapWidth, mapHeight, tileSize;
+
     public PlayScreen(PyroGame game) {
         this.game = game;
-        this.level = level;
 
         // cam to follow character
         gameCam = new OrthographicCamera();
         gameCam.zoom = 2.0f;
-        music = PyroGame.manager.get("audio/music/Avener_lonely_boy.mp3", Music.class);
-        music.setVolume(0.4f);
-        music.play();
+
+
+
 
         // FitViewPort to maintain virtual aspect ratios despite screen size
         viewPort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
         // Load our map and setup map renderer
         mapLoader = new TmxMapLoader();
         generateMap();
+
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PyroGame.PPM);
-        shapeRenderer = new ShapeRenderer();
-        //gameCam.position.set(viewPort.getWorldWidth() / 2, viewPort.getWorldHeight() / 2, 0);
         gameCam.position.x = PyroGame.V_WIDTH / PyroGame.PPM;
         gameCam.position.y = PyroGame.V_HEIGHT / PyroGame.PPM;
 
-        if (PyroGame.currentLevel == Level.FLY || PyroGame.currentLevel == Level.SWIM)
-            world = new World(new Vector2(0, 0), true); // 1 parameter gravity, 2 sleep objects at rest
-        else world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
+
+        world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
         worldCreator = new B2World(this);
         player = new Player(this);
         hud = new Hud(this, game.batch);
 
-
+//        mapProp = map.getProperties();
+//        mapWidth = mapProp.get("width", Integer.class);
+//        mapHeight = mapProp.get("height", Integer.class);
+//        tileSize = mapProp.get("tilewidth", Integer.class);
     }
 
-    @Override public void show() {}
 
-    public void update(final float dt) {
-        world.step(1 / PyroGame.FPS, 6, 2);
+    private void update(final float dt) {
+        world.step(1 / PyroGame.FPS, 10, 8);
         hud.update(dt);
         updatePlatforms(dt);
         updateEnemies(dt);
@@ -117,13 +118,17 @@ public class PlayScreen implements Screen
 
 
     private void setCameraPos() {
-        if (player.body.getPosition().x > (PyroGame.V_WIDTH / PyroGame.PPM))
+        if (player.body.getPosition().x > (PyroGame.V_WIDTH / PyroGame.PPM)) // && player.body.getPosition().x < (mapWidth * tileSize - PyroGame.V_WIDTH) / PyroGame.PPM)
             gameCam.position.x = player.body.getPosition().x;
-        if (player.body.getPosition().y > (PyroGame.V_HEIGHT / PyroGame.PPM))
+        if (player.body.getPosition().y > (PyroGame.V_HEIGHT / PyroGame.PPM))// && player.body.getPosition().y < (mapHeight * tileSize - PyroGame.V_HEIGHT) / PyroGame.PPM)
             gameCam.position.y = player.body.getPosition().y;
     }
 
 
+    @Override
+    public void show() {
+
+    }
 
     @Override public void render(final float delta) {
         update(delta);
@@ -148,7 +153,7 @@ public class PlayScreen implements Screen
         hud.stage.draw();
 
         if(gameOver) {
-            game.setScreen(new com.pimme.game.screens.GameOverScreen(game, hud.getScore()));
+            game.setScreen(new GameOverScreen(game, hud.getScore()));
             dispose();
         }
 
@@ -171,6 +176,7 @@ public class PlayScreen implements Screen
         }
     }
 
+
     public PyroGame getGame() {
         return game;
     }
@@ -185,9 +191,6 @@ public class PlayScreen implements Screen
         return gameCam;
     }
 
-    public Level getLevel() {
-        return level;
-    }
 
     public void setGameOver() {
         gameOver = true;
@@ -214,6 +217,5 @@ public class PlayScreen implements Screen
         world.dispose();
         b2dr.dispose();
         hud.dispose();
-        music.dispose();
     }
 }

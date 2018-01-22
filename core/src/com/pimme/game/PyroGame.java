@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.pimme.game.screens.MenuScreen;
+import com.pimme.game.screens.PlayScreen;
 import com.pimme.game.tools.Graphics;
 import com.pimme.game.tools.Highscore;
 import com.pimme.game.tools.Utils;
@@ -37,14 +38,13 @@ public class PyroGame extends Game
     public static Level currentLevel;
     public static AssetManager manager;
     public static Array<Level> completedLevels;
+    public static Music music;
 
     public enum Level {
         MENS,
         MENS2,
         MENS3,
         BOUNCE,
-        FLY,
-        SWIM
     }
 
     @Override
@@ -54,13 +54,15 @@ public class PyroGame extends Game
         Utils.load();
         manager = new AssetManager();
         loadSounds();
-//        Highscore.load();
-//        Highscore.reset();
+        //Highscore.reset();
         setScreen(new MenuScreen(this));
     }
 
     private void loadSounds() {
         manager.load("audio/music/Avener_lonely_boy.mp3", Music.class);
+        manager.load("audio/music/woohoo.mp3", Music.class);
+        manager.load("audio/music/fadeintoyou.mp3", Music.class);
+        manager.load("audio/music/panama.mp3", Music.class);
         manager.load("audio/sounds/coin2.wav", Sound.class);
         manager.load("audio/sounds/bounce.wav", Sound.class);
         manager.load("audio/sounds/enemyBounce.wav", Sound.class);
@@ -69,8 +71,30 @@ public class PyroGame extends Game
     }
 
     @Override
+    public void render() {
+        super.render();
+        if (getScreen() instanceof PlayScreen)
+            playMusic();
+        else stopmusic();
+    }
+
+    private void playMusic() {
+        if (PyroGame.currentLevel.equals(Level.MENS)) music = PyroGame.manager.get("audio/music/Avener_lonely_boy.mp3", Music.class);
+        if (PyroGame.currentLevel.equals(Level.MENS2)) music = PyroGame.manager.get("audio/music/woohoo.mp3", Music.class);
+        if (PyroGame.currentLevel.equals(Level.MENS3)) music = PyroGame.manager.get("audio/music/panama.mp3", Music.class);
+        if (PyroGame.currentLevel.equals(Level.BOUNCE)) music = PyroGame.manager.get("audio/music/fadeintoyou.mp3", Music.class);
+        music.setVolume(0.4f);
+        music.play();
+    }
+
+    private void stopmusic() {
+        if (music != null) music.stop();
+    }
+
+    @Override
     public void dispose () {
         super.dispose();
         batch.dispose();
+        manager.dispose();
     }
 }

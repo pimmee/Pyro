@@ -48,6 +48,7 @@ public class MenuScreen implements Screen
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+        PyroGame.completedLevels = null;
 
         initButtons();
         mainMenu();
@@ -116,9 +117,8 @@ public class MenuScreen implements Screen
         playAll.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.MENS;
                 PyroGame.completedLevels = new Array<>();
-                System.out.println(PyroGame.completedLevels.size);
+                PyroGame.currentLevel = Level.MENS;
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
@@ -144,20 +144,7 @@ public class MenuScreen implements Screen
                 level1.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
-        bounceLevel.addListener(new ClickListener()
-        {
-            @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.BOUNCE;
-                game.setScreen(new PlayScreen(game));
-                dispose();
-            }
-            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                bounceLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
-            }
-            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                bounceLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
-            }
-        });
+
         level2.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
@@ -175,7 +162,6 @@ public class MenuScreen implements Screen
         level3.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.SWIM;
                 PyroGame.currentLevel = Level.MENS3;
                 game.setScreen(new PlayScreen(game));
                 dispose();
@@ -185,6 +171,21 @@ public class MenuScreen implements Screen
             }
             @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 level3.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+            }
+        });
+
+        bounceLevel.addListener(new ClickListener()
+        {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                PyroGame.currentLevel = Level.BOUNCE;
+                game.setScreen(new PlayScreen(game));
+                dispose();
+            }
+            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                bounceLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+            }
+            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                bounceLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
 
@@ -198,11 +199,11 @@ public class MenuScreen implements Screen
 
     private void selectLevel() {
         table.clear();
-        table.add(playAll).row();
         table.add(level1).row();
-        table.add(bounceLevel).row();
         table.add(level2).row();
         table.add(level3).row();
+        table.add(bounceLevel).row();
+        table.add(playAll).row();
         table.add(backButton).row();
     }
 

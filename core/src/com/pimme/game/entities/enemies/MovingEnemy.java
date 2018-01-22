@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.pimme.game.PyroGame;
@@ -137,21 +138,20 @@ public class MovingEnemy extends Enemy
 		body.createFixture(fdef).setUserData(this);
 
 		//Create the Head here:
-		if (!type.equals("fish")) {
-			PolygonShape head = new PolygonShape();
-			Vector2[] vertice = new Vector2[4];
-			vertice[0] = new Vector2(-18, 21).scl(1 / PyroGame.PPM);
-			vertice[1] = new Vector2(18, 21).scl(1 / PyroGame.PPM);
-			vertice[2] = new Vector2(-3, 3).scl(1 / PyroGame.PPM);
-			vertice[3] = new Vector2(3, 3).scl(1 / PyroGame.PPM);
-			head.set(vertice);
-			fdef.shape = head;
-			fdef.isSensor = true;
-			fdef.restitution = 0.5f;
-			fdef.filter.categoryBits = PyroGame.ENEMY_HEAD_BIT;
+		PolygonShape head = new PolygonShape();
+		Vector2[] vertice = new Vector2[4];
+		vertice[0] = new Vector2(-18, 21).scl(1 / PyroGame.PPM);
+		vertice[1] = new Vector2(18, 21).scl(1 / PyroGame.PPM);
+		vertice[2] = new Vector2(-3, 3).scl(1 / PyroGame.PPM);
+		vertice[3] = new Vector2(3, 3).scl(1 / PyroGame.PPM);
+		head.set(vertice);
 
-			body.createFixture(fdef).setUserData(this);
-		}
+		fdef.shape = head;
+		fdef.isSensor = true;
+		fdef.restitution = 1f;
+		fdef.filter.categoryBits = PyroGame.ENEMY_HEAD_BIT;
+
+		body.createFixture(fdef).setUserData(this);
 	}
 
 	public void draw(Batch batch) {
@@ -161,6 +161,11 @@ public class MovingEnemy extends Enemy
 
 	@Override public void hitOnHead() {
 		setToDestroy = true;
+		for (int i = 0; i < body.getFixtureList().size; i++) { // to not cause collision right at bounce
+			Filter filter = new Filter();
+			filter.categoryBits = PyroGame.NOTHING_BIT;
+			body.getFixtureList().get(i).setFilterData(filter);
+		}
 		screen.getPlayer().body.setLinearVelocity(new Vector2(screen.getPlayer().body.getLinearVelocity().x, 3.5f));
 		PyroGame.manager.get("audio/sounds/enemyBounce.wav", Sound.class).play();
 	}
