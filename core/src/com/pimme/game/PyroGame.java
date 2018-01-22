@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.pimme.game.screens.MenuScreen;
 import com.pimme.game.tools.Graphics;
 import com.pimme.game.tools.Utils;
@@ -34,10 +35,12 @@ public class PyroGame extends Game
 
     public static Level currentLevel;
     public static AssetManager manager;
+    public static Array<Level> completedLevels;
 
     public enum Level {
         MENS,
         MENS2,
+        MENS3,
         BOUNCE,
         FLY,
         SWIM
@@ -49,15 +52,19 @@ public class PyroGame extends Game
         Graphics.init();
         Utils.load();
         manager = new AssetManager();
+        loadSounds();
+//        Highscore.load();
+//        Highscore.reset();
+        setScreen(new MenuScreen(this));
+    }
+
+    private void loadSounds() {
         manager.load("audio/music/Avener_lonely_boy.mp3", Music.class);
         manager.load("audio/sounds/coin2.wav", Sound.class);
         manager.load("audio/sounds/bounce.wav", Sound.class);
         manager.load("audio/sounds/enemyBounce.wav", Sound.class);
         manager.load("audio/sounds/healthpack.wav", Sound.class);
         manager.finishLoading();
-//        Highscore.load();
-//        Highscore.reset();
-        setScreen(new MenuScreen(this));
     }
 
     @Override
@@ -66,12 +73,4 @@ public class PyroGame extends Game
         batch.dispose();
     }
 
-    public static void setCurrentLevel(Level level) {
-        currentLevel = level;
-
-    }
-
-    public static Level getCurrentLevel() {
-        return currentLevel;
-    }
 }

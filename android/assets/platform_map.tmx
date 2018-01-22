@@ -62,7 +62,7 @@
    <properties>
     <property name="distance" type="float" value="0.6"/>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="speed" type="float" value="0.4"/>
+    <property name="speed" type="float" value="0.6"/>
     <property name="type" value="fly"/>
    </properties>
   </object>
@@ -90,9 +90,9 @@
     <property name="type" value="fly"/>
    </properties>
   </object>
-  <object id="80" x="2528" y="512" width="40" height="32">
+  <object id="80" x="2528" y="522" width="40" height="22">
    <properties>
-    <property name="distance" type="float" value="0.2"/>
+    <property name="distance" type="float" value="0.3"/>
     <property name="horizontal" type="bool" value="true"/>
     <property name="speed" type="float" value="0.6"/>
     <property name="type" value="snail"/>

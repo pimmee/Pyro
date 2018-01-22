@@ -58,7 +58,7 @@ public class MovingEnemy extends Enemy
 
 	private TextureRegion getFrame() {
 		region = animation.getKeyFrame(stateTime, true);
-		if((region.isFlipX() && velocity.x < 0) || (!region.isFlipX() && velocity.x > 0))
+		if((region.isFlipX() && velocity.x < 0.1f) || (!region.isFlipX() && velocity.x > 0.1f))
 			region.flip(true, false);
 		return region;
 	}
@@ -140,13 +140,13 @@ public class MovingEnemy extends Enemy
 		if (!type.equals("fish")) {
 			PolygonShape head = new PolygonShape();
 			Vector2[] vertice = new Vector2[4];
-			vertice[0] = new Vector2(-15, 20).scl(1 / PyroGame.PPM);
-			vertice[1] = new Vector2(15, 20).scl(1 / PyroGame.PPM);
+			vertice[0] = new Vector2(-18, 21).scl(1 / PyroGame.PPM);
+			vertice[1] = new Vector2(18, 21).scl(1 / PyroGame.PPM);
 			vertice[2] = new Vector2(-3, 3).scl(1 / PyroGame.PPM);
 			vertice[3] = new Vector2(3, 3).scl(1 / PyroGame.PPM);
 			head.set(vertice);
-
 			fdef.shape = head;
+			fdef.isSensor = true;
 			fdef.restitution = 0.5f;
 			fdef.filter.categoryBits = PyroGame.ENEMY_HEAD_BIT;
 
