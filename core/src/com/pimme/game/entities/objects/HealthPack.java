@@ -14,7 +14,7 @@ public class HealthPack extends InteractiveObject
     }
 
     @Override public void onCollision() {
-        screen.getHud().addHealth(30);
+        screen.getHud().addHealth(20);
         getCell().setTile(null);
         setCategoryFilter(PyroGame.NOTHING_BIT);
         PyroGame.manager.get("audio/sounds/healthpack.wav", Sound.class).play();

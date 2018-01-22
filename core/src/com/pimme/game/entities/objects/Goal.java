@@ -17,7 +17,7 @@ public class Goal extends InteractiveObject
     @Override public void onCollision() {
 	Highscore.load();
 	int score;
-	if (PyroGame.currentLevel == PyroGame.Level.BOUNCE) {
+	if (PyroGame.getCurrentLevel() == PyroGame.Level.BOUNCE) {
 	    score = screen.getHud().getTimeScore();
 	    if (Highscore.getHighScore(Highscore.MAX_SCORES - 1)== 0 || Highscore.getHighScore(Highscore.MAX_SCORES - 1) > score)
 		Highscore.setHighScore(score);

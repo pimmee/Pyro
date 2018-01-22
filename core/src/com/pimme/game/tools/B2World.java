@@ -89,7 +89,7 @@ public class B2World implements ContactListener
 
 	@Override
 	public void beginContact(Contact contact) {
-		if (PyroGame.currentLevel == PyroGame.Level.FLY) screen.getGame().setScreen(new GameOverScreen(screen.getGame(), screen.getHud().getScore()));
+		if (PyroGame.getCurrentLevel() == PyroGame.Level.FLY) screen.getGame().setScreen(new GameOverScreen(screen.getGame(), screen.getHud().getScore()));
 		final Fixture fixA = contact.getFixtureA();
 		final Fixture fixB = contact.getFixtureB();
 

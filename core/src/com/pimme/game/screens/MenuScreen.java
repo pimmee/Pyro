@@ -30,12 +30,11 @@ public class MenuScreen implements Screen
     private TextButton playButton;
     private TextButton exitButton;
     private TextButton backButton;
-    private TextButton level1;
+    private TextButton mensLevel;
     private TextButton bounceLevel;
 //    private TextButton flyLevel;
-    private TextButton level3;
-    private TextButton level2;
-    private TextButton playAll;
+    private TextButton swimLevel;
+    private TextButton mens2Level;
 
     //ÄNDRA FONT HOVER COLOR TILL font_joker_hover
     public MenuScreen(final PyroGame game) {
@@ -68,11 +67,10 @@ public class MenuScreen implements Screen
         playButton = new TextButton("Play", Utils.skin);
         exitButton = new TextButton("Exit", Utils.skin);
         backButton = new TextButton("Back", Utils.skin);
-        playAll = new TextButton("1 life 4 all", Utils.skin);
-        level1 = new TextButton("Level 1", Utils.skin);
-        level2 = new TextButton("Level 2", Utils.skin);
-        level3 = new TextButton("Level 3", Utils.skin);
-        bounceLevel = new TextButton("Level 4", Utils.skin);
+        mensLevel = new TextButton("Mens Knas", Utils.skin);
+        bounceLevel = new TextButton("Bouncy", Utils.skin);
+        mens2Level = new TextButton("Mens Knas 2", Utils.skin);
+        swimLevel = new TextButton("Swim", Utils.skin);
 
         playButton.addListener(new ClickListener()
         {
@@ -112,42 +110,24 @@ public class MenuScreen implements Screen
                 backButton.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
-
-        playAll.addListener(new ClickListener()
+        mensLevel.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.MENS;
-                PyroGame.completedLevels = new Array<>();
-                System.out.println(PyroGame.completedLevels.size);
+                PyroGame.setCurrentLevel(Level.MENS);
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
             @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                playAll.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+                mensLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
             }
             @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                playAll.setStyle(Utils.skin.get("default", TextButtonStyle.class));
-            }
-        });
-
-        level1.addListener(new ClickListener()
-        {
-            @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.MENS;
-                game.setScreen(new PlayScreen(game));
-                dispose();
-            }
-            @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                level1.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
-            }
-            @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                level1.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+                mensLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
         bounceLevel.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.BOUNCE;
+                PyroGame.setCurrentLevel(Level.BOUNCE);
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
@@ -158,32 +138,32 @@ public class MenuScreen implements Screen
                 bounceLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
-        level2.addListener(new ClickListener()
+        mens2Level.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.MENS2;
+                PyroGame.setCurrentLevel(Level.MENS2);
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
             @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                level2.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+                mens2Level.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
             }
             @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                level2.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+                mens2Level.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
-        level3.addListener(new ClickListener()
+        swimLevel.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.currentLevel = Level.MENS3;
+                PyroGame.setCurrentLevel(Level.SWIM);
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
             @Override public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                level3.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
+                swimLevel.setStyle(Utils.skin.get("hover", TextButtonStyle.class));
             }
             @Override public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                level3.setStyle(Utils.skin.get("default", TextButtonStyle.class));
+                swimLevel.setStyle(Utils.skin.get("default", TextButtonStyle.class));
             }
         });
 
@@ -197,11 +177,10 @@ public class MenuScreen implements Screen
 
     private void selectLevel() {
         table.clear();
-        table.add(playAll).row();
-        table.add(level1).row();
+        table.add(mensLevel).row();
         table.add(bounceLevel).row();
-        table.add(level2).row();
-        table.add(level3).row();
+        table.add(mens2Level).row();
+        table.add(swimLevel).row();
         table.add(backButton).row();
     }
 

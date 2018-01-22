@@ -68,7 +68,7 @@ public class PlayScreen implements Screen
         gameCam.position.x = PyroGame.V_WIDTH / PyroGame.PPM;
         gameCam.position.y = PyroGame.V_HEIGHT / PyroGame.PPM;
 
-        if (PyroGame.currentLevel == Level.FLY || PyroGame.currentLevel == Level.SWIM)
+        if (PyroGame.getCurrentLevel() == Level.FLY || PyroGame.getCurrentLevel() == Level.SWIM)
             world = new World(new Vector2(0, 0), true); // 1 parameter gravity, 2 sleep objects at rest
         else world = new World(new Vector2(0, -8), true); // 1 parameter gravity, 2 sleep objects at rest
         b2dr = new Box2DDebugRenderer();
@@ -155,15 +155,12 @@ public class PlayScreen implements Screen
     }
 
     private void generateMap() {
-        switch (PyroGame.currentLevel) {
+        switch (PyroGame.getCurrentLevel()) {
             case MENS:
                 map = mapLoader.load("platform_map.tmx");
                 break;
             case MENS2:
                 map = mapLoader.load("platform_map2.tmx");
-                break;
-            case MENS3:
-                map = mapLoader.load("platform_map3.tmx");
                 break;
             case BOUNCE:
                 map = mapLoader.load("bounce_map.tmx");

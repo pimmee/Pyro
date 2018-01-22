@@ -75,9 +75,9 @@ public class Hud {
     public void render() {
         renderHealthBar();
         renderScore();
-        if(PyroGame.currentLevel == Level.MENS || PyroGame.currentLevel == Level.MENS2)
+        if(PyroGame.getCurrentLevel() == Level.MENS || PyroGame.getCurrentLevel() == Level.MENS2)
             drawWater();
-        if (PyroGame.currentLevel == Level.SWIM) {
+        if (PyroGame.getCurrentLevel() == Level.SWIM) {
             decreaseAir();
             renderAirBar();
         }

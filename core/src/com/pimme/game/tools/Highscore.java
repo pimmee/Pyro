@@ -45,12 +45,12 @@ public final class Highscore
         highScores.reverse(); // Highest score first in list
         highScores.removeIndex(highScores.size - 1);// Remove lowest score
         for (int i = 0; i < highScores.size; i++)
-            prefs.putInteger("HighScore" + i + PyroGame.currentLevel, highScores.get(i)); // Writes scores in correct order
+            prefs.putInteger("HighScore" + i + PyroGame.getCurrentLevel(), highScores.get(i)); // Writes scores in correct order
         prefs.flush();
     }
 
     public static int getHighScore(int i) {
-        return prefs.getInteger("HighScore" + i + PyroGame.currentLevel);
+        return prefs.getInteger("HighScore" + i + PyroGame.getCurrentLevel());
     }
 
 }
