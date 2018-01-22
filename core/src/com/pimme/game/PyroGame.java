@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pimme.game.screens.MenuScreen;
 import com.pimme.game.tools.Graphics;
+import com.pimme.game.tools.Highscore;
 import com.pimme.game.tools.Utils;
 
 public class PyroGame extends Game
@@ -38,6 +39,7 @@ public class PyroGame extends Game
     public enum Level {
         MENS,
         MENS2,
+        MENS3,
         BOUNCE,
         FLY,
         SWIM
@@ -64,14 +66,5 @@ public class PyroGame extends Game
     public void dispose () {
         super.dispose();
         batch.dispose();
-    }
-
-    public static void setCurrentLevel(Level level) {
-        currentLevel = level;
-
-    }
-
-    public static Level getCurrentLevel() {
-        return currentLevel;
     }
 }

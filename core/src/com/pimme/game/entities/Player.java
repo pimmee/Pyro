@@ -52,7 +52,7 @@ public class Player extends Sprite {
     public void update(final float dt) {
         if (currentState == State.DEAD) die();
         handleInput(dt);
-        if(PyroGame.getCurrentLevel().equals(Level.FLY)) setPosition(body.getPosition().x - getWidth() / 1.5f, body.getPosition().y - getHeight() / 2);
+        if(PyroGame.currentLevel.equals(Level.FLY)) setPosition(body.getPosition().x - getWidth() / 1.5f, body.getPosition().y - getHeight() / 2);
         else setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
 
@@ -138,11 +138,11 @@ public class Player extends Sprite {
     }
 
     private void initLevelSpecifics() {
-        if (PyroGame.getCurrentLevel() == Level.FLY) {
+        if (PyroGame.currentLevel == Level.FLY) {
             currentState = State.FLYING;
             body.setLinearVelocity(new Vector2(FLY_SPEED, 0));
             setSize(getWidth() * 1.7f, getHeight() * 1.5f);
-        } else if (PyroGame.getCurrentLevel() == Level.SWIM) currentState = State.SWIMMING;
+        } else if (PyroGame.currentLevel == Level.SWIM) currentState = State.SWIMMING;
         else currentState = State.STANDING;
     }
 
@@ -231,7 +231,7 @@ public class Player extends Sprite {
     }
 
     public void bounce() {
-        if (PyroGame.getCurrentLevel() == Level.BOUNCE)
+        if (PyroGame.currentLevel == Level.BOUNCE)
             body.setLinearVelocity(body.getLinearVelocity().x, 5);
         else body.setLinearVelocity(body.getLinearVelocity().x, 6.5f);
     }

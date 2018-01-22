@@ -113,7 +113,7 @@ public class MenuScreen implements Screen
         mensLevel.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.setCurrentLevel(Level.MENS);
+                PyroGame.currentLevel = Level.MENS;
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
@@ -127,7 +127,7 @@ public class MenuScreen implements Screen
         bounceLevel.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.setCurrentLevel(Level.BOUNCE);
+                PyroGame.currentLevel = Level.BOUNCE;
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
@@ -141,7 +141,7 @@ public class MenuScreen implements Screen
         mens2Level.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.setCurrentLevel(Level.MENS2);
+                PyroGame.currentLevel = Level.MENS2;
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
@@ -155,7 +155,7 @@ public class MenuScreen implements Screen
         swimLevel.addListener(new ClickListener()
         {
             @Override public void clicked(InputEvent event, float x, float y) {
-                PyroGame.setCurrentLevel(Level.SWIM);
+                PyroGame.currentLevel = Level.SWIM;
                 game.setScreen(new PlayScreen(game));
                 dispose();
             }
