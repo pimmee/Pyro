@@ -39,6 +39,7 @@ public class PyroGame extends Game
     public static AssetManager manager;
     public static Array<Level> completedLevels;
     public static Music music;
+    public static int totalHighscore;
 
     public enum Level {
         MENS,
@@ -54,7 +55,7 @@ public class PyroGame extends Game
         Utils.load();
         manager = new AssetManager();
         loadSounds();
-        //Highscore.reset();
+        Highscore.reset();
         setScreen(new MenuScreen(this));
     }
 

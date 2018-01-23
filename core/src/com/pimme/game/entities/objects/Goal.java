@@ -15,19 +15,19 @@ public class Goal extends InteractiveObject
 	}
 
 	@Override public void onCollision() {
-		if (PyroGame.completedLevels != null) PyroGame.completedLevels.add(PyroGame.currentLevel);
+		int score = screen.getHud().getScore();
 		Highscore.load();
-		int score;
-		if (PyroGame.currentLevel == PyroGame.Level.BOUNCE) {
-			score = screen.getHud().getTimeScore();
-			if (Highscore.getHighScore(Highscore.MAX_SCORES - 1)== 0 || Highscore.getHighScore(Highscore.MAX_SCORES - 1) > score)
+		if (PyroGame.completedLevels != null) {
+			PyroGame.completedLevels.add(PyroGame.currentLevel);
+			PyroGame.totalHighscore += score;
+			if (PyroGame.completedLevels.size == 4)
+				Highscore.setHighScore(PyroGame.totalHighscore);
+			else if (Highscore.getHighScore(Highscore.MAX_SCORES - 1) < score)
 				Highscore.setHighScore(score);
 		}
-		else {
-			score = screen.getHud().getScore();
-			if (Highscore.getHighScore(Highscore.MAX_SCORES - 1) < score) // Is score higher than lowest highscore?
-				Highscore.setHighScore(score);
-		}
+		else if (Highscore.getHighScore(Highscore.MAX_SCORES - 1) < score) // Is score higher than lowest highscore?
+			Highscore.setHighScore(score);
+
 
 		screen.getGame().setScreen(new FinishScreen(screen.getGame(), score));
 	}

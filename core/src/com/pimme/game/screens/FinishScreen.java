@@ -46,6 +46,7 @@ public class FinishScreen implements Screen
 		table = new Table();
 		table.setFillParent(true);
 		stage.addActor(table);
+		if (PyroGame.completedLevels != null && PyroGame.completedLevels.size == 4) score = PyroGame.totalHighscore;
 
 		initButtons();
 		setLevelSpecific();

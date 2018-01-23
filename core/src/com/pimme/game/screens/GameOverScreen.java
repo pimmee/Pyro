@@ -46,6 +46,7 @@ public class GameOverScreen implements Screen {
         initButtons();
         Highscore.load();
         PyroGame.completedLevels = null;
+        PyroGame.totalHighscore = 0;
 
         Label gameOverLabel = new Label("GAME OVER", Utils.skin);
         gameOverLabel.setFontScale(1.5f);

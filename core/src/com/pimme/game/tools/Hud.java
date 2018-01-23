@@ -54,7 +54,7 @@ public class Hud {
         table.top();
         table.setFillParent(true);
 
-        scoreLabel = new Label("SCORE: " + Integer.toString(score), new LabelStyle(new BitmapFont(), Color.WHITE));
+        //scoreLabel = new Label("SCORE: " + Integer.toString(score), new LabelStyle(new BitmapFont(), Color.WHITE));
         table.padLeft(PyroGame.V_WIDTH - 100);
         table.add(scoreLabel);
         stage.addActor(table);
@@ -66,13 +66,13 @@ public class Hud {
 
     public void render() {
         renderHealthBar();
-        //renderScore();
+//        renderScore();
         drawWater();
     }
 
 
 //    private void renderScore() {
-//        scoreLabel.setText("SCORE: " + Integer.toString(score));
+//        scoreLabel.setText("SCORE: " + (Integer.toString(getScore())));
 //    }
 
     private void drawWater() {
@@ -145,10 +145,8 @@ public class Hud {
         score += amount;
     }
 
-    public int getTimeScore() {
-        return (int) Math.floor(1/Math.sqrt(time) * 100 * hp);
-    }
-    public int getScore() { return (int) (score/waterLevel); }
+
+    public int getScore() { return (int) Math.floor(1/Math.sqrt(time) * score / 10 * hp); }
     public float getHealth() { return hp; }
     public void addHealth(float amount) {
         if (hp + amount > MAX_HEALTH) hp = MAX_HEALTH;

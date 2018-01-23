@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.1" orientation="orthogonal" renderorder="right-down" width="100" height="37" tilewidth="32" tileheight="32" infinite="0" nextobjectid="113">
+<map version="1.0" tiledversion="1.1.1" orientation="orthogonal" renderorder="right-down" width="100" height="37" tilewidth="32" tileheight="32" infinite="0" nextobjectid="115">
  <tileset firstgid="1" source="winter32.tsx"/>
  <tileset firstgid="7" source="misc32_tileset.tsx"/>
  <tileset firstgid="13" source="tileset32_new.tsx"/>
@@ -13,7 +13,7 @@
   </data>
  </layer>
  <objectgroup name="start">
-  <object id="112" x="72" y="992" width="32" height="32"/>
+  <object id="114" x="72" y="1024" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="goal">
   <object id="36" x="3168" y="528" width="32" height="48"/>

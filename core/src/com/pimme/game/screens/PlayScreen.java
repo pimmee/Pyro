@@ -137,7 +137,7 @@ public class PlayScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //render game map
         renderer.render();  // renders textures to bodies
-        b2dr.render(world, gameCam.combined);
+        //b2dr.render(world, gameCam.combined);
 
 
         game.batch.setProjectionMatrix(gameCam.combined);
