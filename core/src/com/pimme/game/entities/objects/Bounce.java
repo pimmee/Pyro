@@ -28,7 +28,7 @@ public class Bounce extends InteractiveObject
         if (screen.getPlayer().body.getLinearVelocity().y < 0) {
             getCell().setTile(new StaticTiledMapTile(Graphics.bounceTexture));
             screen.getPlayer().bounce();
-            PyroGame.manager.get("audio/sounds/bounce.wav", Sound.class).play();
+            manager.getAssetManager().get("audio/sounds/bounce.wav", Sound.class).play();
             new Timer().schedule(
                     new TimerTask() {
                         @Override

@@ -1,5 +1,6 @@
 package com.pimme.game.entities.objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.pimme.game.PyroGame;
@@ -18,6 +19,7 @@ public class Tampon extends InteractiveObject
 
     @Override public void onCollision() {
 	screen.getHud().setTamponActive(true);
+	manager.getAssetManager().get("audio/sounds/tampon.wav", Sound.class).play();
 	setCategoryFilter(PyroGame.NOTHING_BIT);
 	nullifyCells();
 	new Timer().schedule(

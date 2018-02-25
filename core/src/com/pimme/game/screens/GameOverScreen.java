@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pimme.game.PyroGame;
 import com.pimme.game.tools.Highscore;
+import com.pimme.game.tools.Manager;
+import com.pimme.game.tools.Manager.Level;
 import com.pimme.game.tools.Utils;
 
 /**
@@ -24,15 +26,18 @@ import com.pimme.game.tools.Utils;
  */
 public class GameOverScreen implements Screen {
     private PyroGame game;
+    private Manager manager;
     private Viewport viewPort;
     private Stage stage;
+    private Label gameOverLabel;
 
     private TextButton playAgainButton;
     private TextButton menuButton;
     private TextButton exitButton;
 
-    public GameOverScreen(final PyroGame game, int score) {
+    public GameOverScreen(PyroGame game, int score) {
         this.game = game;
+        manager = game.getManager();
 
         viewPort = new FitViewport(PyroGame.V_WIDTH, PyroGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewPort, game.batch);
@@ -42,14 +47,14 @@ public class GameOverScreen implements Screen {
         //table.setDebug(true);
         table.setFillParent(true);
         stage.addActor(table);
-
         initButtons();
-        Highscore.load();
-        PyroGame.completedLevels = null;
-        PyroGame.totalHighscore = 0;
 
-        Label gameOverLabel = new Label("GAME OVER", Utils.skin);
+        manager.loadHighScores();
+        gameOverLabel = new Label("GAME OVER", Utils.skin);
         gameOverLabel.setFontScale(1.5f);
+
+        setGameStatus();
+
         table.add(gameOverLabel).colspan(3).row();
         table.add(playAgainButton).colspan(3).row();
         table.add(menuButton).colspan(3).row();
@@ -58,8 +63,8 @@ public class GameOverScreen implements Screen {
         table.add(new Label("Score:   ", Utils.skin));
         table.add(new Label(Integer.toString(score), Utils.skin.get("green", LabelStyle.class))).left().row();
 
-        for (int i = 0; i < Highscore.MAX_SCORES; i ++) {
-            table.add(new Label(Integer.toString(i + 1) + ".         " + Integer.toString(Highscore.getHighScore(i)), Utils.skin)).left().row();
+        for (int i = 0; i < Highscore.MAX_SCORES; i ++) {   // Show highscores
+            table.add(new Label(Integer.toString(i + 1) + ".         " + Integer.toString(manager.getHighScore(i)), Utils.skin)).left().row();
        }
     }
 
@@ -68,7 +73,19 @@ public class GameOverScreen implements Screen {
 
     }
 
-    public void update() {
+    private void setGameStatus() {
+        if (manager.getCompletedLevels() != null) { // If story mode
+            manager.loseLife();
+            if (manager.getLivesLeft() == 0 || manager.getCurrentLevel().equals(Level.LEVEL1)) { // If out of lives or level 1
+                manager.setCurrentLevel(Level.LEVEL1);
+                manager.resetCompletedLevels();
+                manager.resetLivesLeft();
+                manager.setTotalHighscore(0);
+            } else {
+                gameOverLabel.setText("LIVES " + manager.getLivesLeft());
+                playAgainButton.setText("Try again");
+            }
+        }
     }
 
     @Override
@@ -80,7 +97,7 @@ public class GameOverScreen implements Screen {
     }
 
     private void initButtons() {
-        playAgainButton = new TextButton("Play again", Utils.skin);
+        playAgainButton = new TextButton("Restart", Utils.skin);
         menuButton = new TextButton("Menu", Utils.skin);
         exitButton = new TextButton("Exit", Utils.skin);
 

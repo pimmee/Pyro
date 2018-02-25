@@ -17,6 +17,6 @@ public class HealthPack extends InteractiveObject
         screen.getHud().addHealth(30);
         getCell().setTile(null);
         setCategoryFilter(PyroGame.NOTHING_BIT);
-        PyroGame.manager.get("audio/sounds/healthpack.wav", Sound.class).play();
+        manager.getAssetManager().get("audio/sounds/healthpack.wav", Sound.class).play();
     }
 }

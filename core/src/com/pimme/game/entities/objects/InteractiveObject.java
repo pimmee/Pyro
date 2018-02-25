@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.pimme.game.PyroGame;
 import com.pimme.game.screens.PlayScreen;
+import com.pimme.game.tools.Manager;
 
 public abstract class InteractiveObject
 {
@@ -19,11 +20,13 @@ public abstract class InteractiveObject
 	protected Body body;
 	protected Fixture fixture;
 	protected PlayScreen screen;
+	protected Manager manager;
 	protected InteractiveObject(PlayScreen screen, MapObject object) {
 		this.screen = screen;
 		this.world = screen.getWorld();
 		this.map = screen.getMap();
 		this.bounds = ((RectangleMapObject) object).getRectangle();
+		this.manager = screen.getGame().getManager();
 
 		defineObject();
 	}

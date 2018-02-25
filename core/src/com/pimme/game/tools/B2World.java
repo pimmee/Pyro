@@ -13,12 +13,10 @@ import com.pimme.game.entities.enemies.Enemy;
 import com.pimme.game.entities.enemies.MovingEnemy;
 import com.pimme.game.entities.Platform;
 import com.pimme.game.entities.objects.*;
-import com.pimme.game.screens.GameOverScreen;
 import com.pimme.game.screens.PlayScreen;
 
 public class B2World implements ContactListener
 {
-	private World world;
 	private TiledMap map;
 	private PlayScreen screen;
 	private Array<Platform> platforms;
@@ -26,12 +24,11 @@ public class B2World implements ContactListener
 
 	public B2World(PlayScreen screen) {
 		this.screen = screen;
-		this.world = screen.getWorld();
 		this.map = screen.getMap();
 		platforms = new Array<>();
 		enemies = new Array<>();
 
-		world.setContactListener(this);
+		screen.getWorld().setContactListener(this);
 		initMapObjects();
 
 	}
@@ -83,6 +80,10 @@ public class B2World implements ContactListener
 					for (MapObject object : map.getLayers().get(layer).getObjects().getByType(RectangleMapObject.class))
 						platforms.add(new Platform(screen, object));
 					break;
+				case 12:
+					for (MapObject object : map.getLayers().get(layer).getObjects().getByType(RectangleMapObject.class))
+						new Bomb(screen, object);
+					break;
 			}
 		}
 	}
@@ -101,6 +102,7 @@ public class B2World implements ContactListener
 			case PyroGame.PLAYER_BIT | PyroGame.TAMPON_BIT:
 			case PyroGame.PLAYER_BIT | PyroGame.SPIKE_BIT:
 			case PyroGame.PLAYER_BIT | PyroGame.GOAL_BIT:
+			case PyroGame.PLAYER_BIT | PyroGame.BOMB_BIT:
 				if(fixA.getFilterData().categoryBits == PyroGame.PLAYER_BIT)
 					((InteractiveObject) fixB.getUserData()).onCollision();
 				else ((InteractiveObject) fixA.getUserData()).onCollision();

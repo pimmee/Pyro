@@ -1,7 +1,6 @@
 package com.pimme.game.entities.enemies;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
@@ -167,6 +166,6 @@ public class MovingEnemy extends Enemy
 			body.getFixtureList().get(i).setFilterData(filter);
 		}
 		screen.getPlayer().body.setLinearVelocity(new Vector2(screen.getPlayer().body.getLinearVelocity().x, 3.5f));
-		PyroGame.manager.get("audio/sounds/enemyBounce.wav", Sound.class).play();
+		manager.getAssetManager().get("audio/sounds/enemyBounce.wav", Sound.class).play();
 	}
 }

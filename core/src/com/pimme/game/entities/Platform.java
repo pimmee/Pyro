@@ -21,8 +21,7 @@ import com.pimme.game.screens.PlayScreen;
 
 public class Platform extends Sprite
 {
-    private PlayScreen screen;
-    private World world;
+	private World world;
     private Rectangle bounds;
     private Body body;
     private Fixture fixture;
@@ -33,8 +32,7 @@ public class Platform extends Sprite
     private float spawnX, spawnY;
     public Platform(PlayScreen screen, MapObject object) {
         super(new Texture(Gdx.files.internal("winter_ledges.png")));
-	this.screen = screen;
-	this.world = screen.getWorld();
+		this.world = screen.getWorld();
 	this.bounds = ((RectangleMapObject) object).getRectangle();
 	MapProperties properties = object.getProperties();
 	moveDistance = properties.get("distance", Float.class);

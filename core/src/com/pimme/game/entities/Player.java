@@ -1,24 +1,26 @@
 package com.pimme.game.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.pimme.game.PyroGame;
-import com.pimme.game.PyroGame.Level;
 import com.pimme.game.screens.PlayScreen;
 import com.pimme.game.tools.Graphics;
+import com.pimme.game.tools.Manager.Level;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 public class Player extends Sprite {
-    private static final float SPEED = 5;
+    private static final float SPEED = 4.5f;
     private static final float JUMP_VEL = 4.4f;
     private static final float MAX_SPEED = 2;
+
 
     public enum State {FALLING, JUMPING, STANDING, RUNNING, FLYING, SWIMMING, HURT, DEAD}
 
@@ -43,7 +45,6 @@ public class Player extends Sprite {
 
     public void update(final float dt) {
         if (currentState == State.DEAD) die();
-        handleInput(dt);
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
 
@@ -94,8 +95,7 @@ public class Player extends Sprite {
         if ((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {//If running to the left but faceing right
             region.flip(true, false);
             runningRight = false;
-        }
-        else if ((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+        } else if ((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
             region.flip(true, false);
             runningRight = true;
         }
@@ -105,27 +105,15 @@ public class Player extends Sprite {
     }
 
     private State getState() {
-            if (body.getLinearVelocity().y > 0)
-                return State.JUMPING;
-            else if (body.getLinearVelocity().y < 0)
-                return State.FALLING;
-            else if (body.getLinearVelocity().x != 0)
-                return State.RUNNING;
-            else
-                return State.STANDING;
+        if (body.getLinearVelocity().y > 0)
+            return State.JUMPING;
+        else if (body.getLinearVelocity().y < 0)
+            return State.FALLING;
+        else if (body.getLinearVelocity().x != 0)
+            return State.RUNNING;
+        else
+            return State.STANDING;
     }
-
-    private void handleInput(final float dt) {
-        if (Gdx.input.isKeyJustPressed(Keys.UP))// && body.getLinearVelocity().y <= MAX_FLY_SPEED)
-            jump(dt);
-        if (Gdx.input.isKeyPressed(Keys.RIGHT))
-            moveRight(dt);
-        if (Gdx.input.isKeyPressed(Keys.LEFT))
-            moveLeft(dt);
-//        if (Gdx.input.isKeyPressed(Keys.DOWN))
-//            moveDown(dt);
-    }
-
 
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
@@ -136,6 +124,7 @@ public class Player extends Sprite {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
+//        Rounded corners rectangle
 //        PolygonShape dynamicBox = new PolygonShape();
 //        Vector2[] boxVertices = new Vector2[8];
 //        boxVertices[0] = new Vector2(-0.15f, -0.08f);
@@ -157,6 +146,7 @@ public class Player extends Sprite {
                 PyroGame.GOAL_BIT |
                 PyroGame.ENEMY_BIT |
                 PyroGame.ENEMY_HEAD_BIT |
+                PyroGame.BOMB_BIT |
                 PyroGame.BOUNCE_BIT;
 
         fdef.shape = shape;
@@ -188,23 +178,25 @@ public class Player extends Sprite {
 //            body.applyLinearImpulse(new Vector2(0, -SWIM_SPEED * dt), body.getWorldCenter(), true);
 //    }
 
-    private void jump(float dt) {
-        if (currentState == State.STANDING || currentState == State.RUNNING)
+    public void jump() {
+        if (currentState == State.STANDING || currentState == State.RUNNING) {
             body.applyLinearImpulse(new Vector2(0, JUMP_VEL), body.getWorldCenter(), true);
+            currentState = State.JUMPING;
+        }
     }
 
-    private void moveLeft(float dt) {
+    public void moveLeft(float dt) {
         if (body.getLinearVelocity().x > -MAX_SPEED)
-        body.applyLinearImpulse(new Vector2(-SPEED * dt, 0), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(-SPEED * dt, 0), body.getWorldCenter(), true);
     }
 
-    private void moveRight(float dt) {
+    public void moveRight(float dt) {
         if (body.getLinearVelocity().x < MAX_SPEED)
             body.applyLinearImpulse(new Vector2(SPEED * dt, 0), body.getWorldCenter(), true);
     }
 
     public void bounce() {
-        if (PyroGame.currentLevel == Level.BOUNCE)
+        if (screen.getGame().getManager().getCurrentLevel() == Level.BOUNCE)
             body.setLinearVelocity(body.getLinearVelocity().x, 5);
         else body.setLinearVelocity(body.getLinearVelocity().x, 6.5f);
     }
@@ -213,6 +205,7 @@ public class Player extends Sprite {
         new Timer().scheduleAtFixedRate(
                 new TimerTask() {
                     int count = 0;
+
                     @Override
                     public void run() {
                         count++;

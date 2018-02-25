@@ -16,12 +16,13 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pimme.game.PyroGame;
 import com.pimme.game.screens.PlayScreen;
+import com.pimme.game.tools.Manager;
 
 public abstract class Enemy extends Sprite
 {
 	protected World world;
 	protected PlayScreen screen;
-	protected TiledMap map;
+	protected Manager manager;
 	public Body body;
 	protected Fixture fixture;
 	protected Rectangle bounds;
@@ -33,10 +34,10 @@ public abstract class Enemy extends Sprite
 	protected MapProperties properties;
 
 	public Enemy(PlayScreen screen, MapObject object) {
-		this.world = screen.getWorld();
-		this.map = screen.getMap();
 		this.screen = screen;
-		this.bounds = ((RectangleMapObject) object).getRectangle();
+		manager = screen.getGame().getManager();
+		world = screen.getWorld();
+		bounds = ((RectangleMapObject) object).getRectangle();
 		properties = object.getProperties();
 		setPosition((bounds.getX() + bounds.getWidth() / 2) / PyroGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PyroGame.PPM);
 		setSize(bounds.getWidth() / PyroGame.PPM, bounds.getHeight() / PyroGame.PPM);

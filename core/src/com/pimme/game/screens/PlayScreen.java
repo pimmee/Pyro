@@ -2,13 +2,10 @@ package com.pimme.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -19,13 +16,15 @@ import com.pimme.game.PyroGame;
 import com.pimme.game.entities.enemies.Enemy;
 import com.pimme.game.entities.Platform;
 import com.pimme.game.entities.Player;
-import com.pimme.game.PyroGame.Level;
 import com.pimme.game.tools.B2World;
+import com.pimme.game.tools.Controller;
 import com.pimme.game.tools.Hud;
+import com.pimme.game.tools.Manager;
 
 public class PlayScreen implements Screen
 {
     private PyroGame game;
+    private Manager manager;
     private OrthographicCamera gameCam;
     private FitViewport viewPort;
 
@@ -42,6 +41,7 @@ public class PlayScreen implements Screen
 
     private Player player;
     private Hud hud;
+    private Controller controller;
 
     private Vector2 spawnPos;
     private boolean gameOver;
@@ -50,13 +50,11 @@ public class PlayScreen implements Screen
 
     public PlayScreen(PyroGame game) {
         this.game = game;
+        manager = game.getManager();
 
         // cam to follow character
         gameCam = new OrthographicCamera();
         gameCam.zoom = 2.0f;
-
-
-
 
         // FitViewPort to maintain virtual aspect ratios despite screen size
         viewPort = new FitViewport(PyroGame.V_WIDTH / PyroGame.PPM, PyroGame.V_HEIGHT / PyroGame.PPM, gameCam);
@@ -75,6 +73,9 @@ public class PlayScreen implements Screen
         player = new Player(this);
         hud = new Hud(this, game.batch);
 
+        controller = new Controller(this);
+//        Gdx.input.setInputProcessor(new GestureDetector(controller));
+
 //        mapProp = map.getProperties();
 //        mapWidth = mapProp.get("width", Integer.class);
 //        mapHeight = mapProp.get("height", Integer.class);
@@ -87,6 +88,7 @@ public class PlayScreen implements Screen
         hud.update(dt);
         updatePlatforms(dt);
         updateEnemies(dt);
+        controller.update(dt);
         player.update(dt);
         setCameraPos();
         gameCam.update();
@@ -118,9 +120,9 @@ public class PlayScreen implements Screen
 
 
     private void setCameraPos() {
-        if (player.body.getPosition().x > (PyroGame.V_WIDTH / PyroGame.PPM)) // && player.body.getPosition().x < (mapWidth * tileSize - PyroGame.V_WIDTH) / PyroGame.PPM)
+//        if (player.body.getPosition().x > (PyroGame.V_WIDTH / PyroGame.PPM)) // && player.body.getPosition().x < (mapWidth * tileSize - PyroGame.V_WIDTH) / PyroGame.PPM)
             gameCam.position.x = player.body.getPosition().x;
-        if (player.body.getPosition().y > (PyroGame.V_HEIGHT / PyroGame.PPM))// && player.body.getPosition().y < (mapHeight * tileSize - PyroGame.V_HEIGHT) / PyroGame.PPM)
+//        if (player.body.getPosition().y > (PyroGame.V_HEIGHT / PyroGame.PPM))// && player.body.getPosition().y < (mapHeight * tileSize - PyroGame.V_HEIGHT) / PyroGame.PPM)
             gameCam.position.y = player.body.getPosition().y;
     }
 
@@ -160,14 +162,14 @@ public class PlayScreen implements Screen
     }
 
     private void generateMap() {
-        switch (PyroGame.currentLevel) {
-            case MENS:
+        switch (manager.getCurrentLevel()) {
+            case LEVEL1:
                 map = mapLoader.load("platform_map.tmx");
                 break;
-            case MENS2:
+            case LEVEL2:
                 map = mapLoader.load("platform_map2.tmx");
                 break;
-            case MENS3:
+            case LEVEL3:
                 map = mapLoader.load("platform_map3.tmx");
                 break;
             case BOUNCE:

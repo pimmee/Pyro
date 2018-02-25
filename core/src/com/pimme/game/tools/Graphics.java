@@ -26,10 +26,10 @@ public final class Graphics
 	public static TextureRegion flyDead, fishDead, snailDead;
     public static TextureRegion bounceTexture, idleBounceTexture;
 	//Sprites
-	public static Texture puppySprite;
-	public static Texture tilesSprite;
-	public static Texture enemiesSprite;
-	public static Texture platform;
+	private static Texture puppySprite;
+	private static Texture tilesSprite;
+	private static Texture enemiesSprite;
+	private static Texture platform;
 
 
 	public static void init() {

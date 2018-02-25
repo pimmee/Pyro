@@ -4,20 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.pimme.game.PyroGame;
-import com.pimme.game.PyroGame.Level;
 import com.pimme.game.entities.Player.State;
 import com.pimme.game.screens.PlayScreen;
+import com.pimme.game.tools.Manager.Level;
 
 
 /**
@@ -26,6 +24,7 @@ import com.pimme.game.screens.PlayScreen;
 public class Hud {
 
     private PlayScreen screen;
+    private Manager manager;
     public Stage stage;
     private Viewport viewPort;
 
@@ -34,16 +33,18 @@ public class Hud {
     private static final float MAX_HEALTH = 100;
 
     private ShapeRenderer shapeRenderer;
-    private float waterLevel = -0.7f;
-    private float waterSpeed = 0.005f;
+    private static final float WATER_SPEED = 0.005f;
+    private static final float WATER_MIN = -0.7f;
+    private float waterLevel = WATER_MIN;
     private boolean tamponActive = false;
     private float hp = 100;
     private int score = 0;
     private float time = 0;
-    private Label scoreLabel;
+    private Label scoreLabel, levelLabel, livesLabel;
 
     public Hud(PlayScreen screen, SpriteBatch batch) {
         this.screen = screen;
+        manager = screen.getGame().getManager();
 
         viewPort = new FitViewport(PyroGame.V_WIDTH, PyroGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewPort, batch);
@@ -52,12 +53,26 @@ public class Hud {
 
         Table table = new Table();
         table.top();
+
         table.setFillParent(true);
 
         //scoreLabel = new Label("SCORE: " + Integer.toString(score), new LabelStyle(new BitmapFont(), Color.WHITE));
-        table.padLeft(PyroGame.V_WIDTH - 100);
         table.add(scoreLabel);
+        if (manager.getCompletedLevels() != null && manager.getCurrentLevel() != Level.LEVEL1) {
+            //levelLabel = new Label("LEVEL  " + Integer.toString(manager.getCompletedLevels().size + 1), Utils.skin);
+            livesLabel = new Label("LIVES  " + Integer.toString(manager.getLivesLeft()), Utils.skin);
+        }
+        Table leftTable = new Table();
+        Table rightTable = new Table();
+        rightTable.add(levelLabel);
+        leftTable.add(livesLabel);
+        leftTable.left().top();
+        rightTable.right().top();
+        leftTable.setFillParent(true);
+        rightTable.setFillParent(true);
         stage.addActor(table);
+        stage.addActor(leftTable);
+        stage.addActor(rightTable);
     }
 
     public void update(final float dt) {
@@ -76,10 +91,10 @@ public class Hud {
 //    }
 
     private void drawWater() {
-        if (tamponActive && waterLevel > 0)
-            waterLevel -= waterSpeed;
+        if (tamponActive && waterLevel > WATER_MIN)
+            waterLevel -= WATER_SPEED;
         else
-            waterLevel += waterSpeed;
+            waterLevel += WATER_SPEED;
         //Draws water
         if (screen.getPlayer().getY() <= waterLevel)
             reduceHealth(0.2f);
@@ -88,7 +103,10 @@ public class Hud {
         shapeRenderer.setProjectionMatrix(screen.getGameCam().combined);
         shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(1, 0, 0, 0.3f);
-        shapeRenderer.rect(0, 0, 50, waterLevel);
+        if (waterLevel < 0)
+            shapeRenderer.rect(0, WATER_MIN, 100, Math.abs(WATER_MIN -waterLevel));
+        else
+            shapeRenderer.rect(0, WATER_MIN, 100, Math.abs(WATER_MIN) + waterLevel);
         shapeRenderer.end();
     }
 
@@ -146,7 +164,10 @@ public class Hud {
     }
 
 
-    public int getScore() { return (int) Math.floor(1/Math.sqrt(time) * score / 10 * hp); }
+    public int getScore() {
+        int calcScore = (int) Math.floor(1/Math.sqrt(time) * score / 10 * hp);
+        if (calcScore < 0) calcScore = 0;
+        return calcScore; }
     public float getHealth() { return hp; }
     public void addHealth(float amount) {
         if (hp + amount > MAX_HEALTH) hp = MAX_HEALTH;
